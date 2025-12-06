@@ -42,6 +42,7 @@ app.*.map.json
 # Firebase config files (DO NOT COMMIT THESE!)
 **/google-services.json
 **/GoogleService-Info.plist
+lib/firebase_options.dart
 
 # Environment files
 .env
