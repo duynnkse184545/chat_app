@@ -31,7 +31,7 @@ abstract class AuthRemoteDatasource {
   });
 }
 
-class AuthRemoteDatasourceImpl extends AuthRemoteDatasource {
+class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
 

@@ -15,7 +15,7 @@ abstract class AuthLocalDatasource{
   Future<bool> hasCache();
 }
 
-class AuthLocalDatasourceImpl extends AuthLocalDatasource{
+class AuthLocalDatasourceImpl implements AuthLocalDatasource{
   final SharedPreferences sharedPreferences;
   static const String _cachedUserKey = 'CACHED_USER';
 
