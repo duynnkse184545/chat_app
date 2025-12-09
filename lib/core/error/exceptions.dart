@@ -10,6 +10,10 @@ class ServerException extends AppException{
   ServerException(super.message);
 }
 
+class AuthException extends AppException{
+  AuthException(super.message);
+}
+
 class CacheException extends AppException{
   CacheException(super.message);
 }
