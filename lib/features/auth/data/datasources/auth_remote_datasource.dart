@@ -127,15 +127,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     required String username,
   }) async {
     try {
-      final userQuery = await firebaseFirestore
-          .collection(FirebaseConstants.usersCollection)
-          .where('username', isEqualTo: username)
-          .limit(1)
-          .get();
-      if (userQuery.docs.isNotEmpty) {
-        throw AuthException('Username is already taken!');
-      }
-
+      // Create Firebase Auth user first
       final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password
@@ -145,17 +137,34 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         throw AuthException('Failed to create user!');
       }
 
-      final userModel = UserModel(uid: userCredential.user!.uid,
-          email: email,
-          username: username,
-          createdAt: DateTime.now());
+      // Now user is authenticated, we can check username
+      final userQuery = await firebaseFirestore
+          .collection(FirebaseConstants.usersCollection)
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+      
+      if (userQuery.docs.isNotEmpty) {
+        // Username taken - delete the auth user we just created
+        await userCredential.user!.delete();
+        throw AuthException('Username is already taken!');
+      }
 
-      await firebaseFirestore.collection(FirebaseConstants.usersCollection)
-      .doc(userModel.uid)
-      .set(userModel.toJson());
+      // Create user document
+      final userModel = UserModel(
+        uid: userCredential.user!.uid,
+        email: email,
+        username: username,
+        createdAt: DateTime.now(),
+      );
+
+      await firebaseFirestore
+          .collection(FirebaseConstants.usersCollection)
+          .doc(userModel.uid)
+          .set(userModel.toJson());
 
       return userModel;
-    } on FirebaseException catch (e) {
+    } on FirebaseAuthException catch (e) {
       throw AuthException(_getAuthErrorMessage(e.code));
     } catch(e) {
       if(e is AuthException) rethrow;

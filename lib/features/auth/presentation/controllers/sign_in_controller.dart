@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../states/sign_in_state.dart';
@@ -45,10 +46,12 @@ class SignInController extends _$SignInController {
 
     return result.fold(
       (failure) {
+        debugPrint('🔴 Sign-in failed: ${failure.message}');
         state = state.copyWith(isLoading: false, errorMessage: failure.message);
         return false;
       },
       (user) {
+        debugPrint('✅ Sign-in successful: ${user.email}');
         state = state.copyWith(isLoading: false);
         return true;
       },

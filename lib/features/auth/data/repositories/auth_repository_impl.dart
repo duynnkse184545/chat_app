@@ -4,6 +4,7 @@ import 'package:chat_app/features/auth/data/datasources/auth_local_datasource.da
 import 'package:chat_app/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 import 'package:chat_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
   final AuthRemoteDatasource remoteDatasource;
@@ -21,12 +22,16 @@ class AuthRepositoryImpl extends BaseRepository implements AuthRepository {
         try {
           await localDatasource.cacheUser(userModel);
           return userModel.toEntity();
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('⚠️ Failed to cache user on auth state change: $e');
+        }
         return userModel.toEntity();
       } else {
         try {
           await localDatasource.clearCache();
-        } catch (_) {}
+        } catch (e) {
+          debugPrint('⚠️ Failed to clear cache on sign out: $e');
+        }
         return null;
       }
     });

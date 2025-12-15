@@ -1,10 +1,31 @@
 import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
+
+// Timestamp converter for Firestore
+class TimestampConverter implements JsonConverter<DateTime, dynamic> {
+  const TimestampConverter();
+
+  @override
+  DateTime fromJson(dynamic timestamp) {
+    if (timestamp is Timestamp) {
+      return timestamp.toDate();
+    }
+    if (timestamp is String) {
+      return DateTime.parse(timestamp);
+    }
+    if (timestamp is int) {
+      return DateTime.fromMillisecondsSinceEpoch(timestamp);
+    }
+    return DateTime.now();
+  }
+
+  @override
+  dynamic toJson(DateTime dateTime) => dateTime.toIso8601String();
+}
 
 @freezed
 abstract class UserModel with _$UserModel {
@@ -15,8 +36,7 @@ abstract class UserModel with _$UserModel {
     required String email,
     required String username,
     String? avatarUrl,
-    @JsonKey(fromJson: _timestampFromJson, toJson: _timestampToJson)
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
     String? bio,
     @Default([]) List<String> serverIds,
   }) = _UserModel;
@@ -46,19 +66,5 @@ abstract class UserModel with _$UserModel {
       bio: entity.bio,
       serverIds: entity.serverIds,
     );
-  }
-
-  static DateTime _timestampFromJson(dynamic timestamp) {
-    if (timestamp is Timestamp) {
-      return timestamp.toDate();
-    }
-    if (timestamp is String) {
-      return DateTime.parse(timestamp);
-    }
-    return DateTime.now();
-  }
-
-  static dynamic _timestampToJson(DateTime timestamp) {
-    return Timestamp.fromDate(timestamp);
   }
 }
