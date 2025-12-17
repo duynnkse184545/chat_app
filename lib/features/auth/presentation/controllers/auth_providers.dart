@@ -5,16 +5,11 @@ import 'package:chat_app/features/auth/data/repositories/auth_repository_impl.da
 import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/providers/shared_providers.dart';
 import '../../domain/repository/auth_repository.dart';
 
 part 'auth_providers.g.dart';
-
-@riverpod
-Future<SharedPreferences> sharedPreferences(Ref ref) async {
-  return await SharedPreferences.getInstance();
-}
 
 @riverpod
 AuthRemoteDatasource authRemoteDatasource(Ref ref) {

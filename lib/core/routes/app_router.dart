@@ -71,6 +71,27 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         name: Routes.home.name,
         builder: (context, state) => const HomeScreen(),
       ),
+
+      GoRoute(
+        path: Routes.servers.path,
+        name: Routes.servers.name,
+        builder: (context, state) => const ServerListScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.serverDetails.path,
+        name: Routes.serverDetails.name,
+        builder: (context, state) {
+          final serverId = state.pathParameters['serverId']!;
+          return ServerDetailScreen(serverId: serverId);
+        },
+      ),
+
+      GoRoute(
+        path: Routes.createServer.path,
+        name: Routes.createServer.name,
+        builder: (context, state) => const CreateServerScreen(),
+      ),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

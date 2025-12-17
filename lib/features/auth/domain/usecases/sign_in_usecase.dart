@@ -6,9 +6,9 @@ import 'package:dartz/dartz.dart';
 import '../entities/user_entity.dart';
 
 class SignInUseCase{
-  final AuthRepository authRepository;
+  final AuthRepository _authRepository;
 
-  SignInUseCase(this.authRepository);
+  SignInUseCase(this._authRepository);
 
   FutureEither<UserEntity> call({
     required String email,
@@ -23,6 +23,6 @@ class SignInUseCase{
     if(password.length < 6){
       return const Left(Failure.authFailure('Password must be at least 6 characters!'));
     }
-    return authRepository.signInWithEmailAndPassword(email: email.trim(), password: password);
+    return _authRepository.signInWithEmailAndPassword(email: email.trim(), password: password);
   }
 }

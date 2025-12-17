@@ -1,31 +1,9 @@
+import 'package:chat_app/core/utils/json_converters.dart';
 import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
-
-// Timestamp converter for Firestore
-class TimestampConverter implements JsonConverter<DateTime, dynamic> {
-  const TimestampConverter();
-
-  @override
-  DateTime fromJson(dynamic timestamp) {
-    if (timestamp is Timestamp) {
-      return timestamp.toDate();
-    }
-    if (timestamp is String) {
-      return DateTime.parse(timestamp);
-    }
-    if (timestamp is int) {
-      return DateTime.fromMillisecondsSinceEpoch(timestamp);
-    }
-    return DateTime.now();
-  }
-
-  @override
-  dynamic toJson(DateTime dateTime) => dateTime.toIso8601String();
-}
 
 @freezed
 abstract class UserModel with _$UserModel {

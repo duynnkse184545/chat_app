@@ -44,6 +44,11 @@ class Routes {
     path: '/servers/:serverId',
   );
 
+  static const RouteInfo createServer = RouteInfo(
+    name: 'create-server',
+    path: '/create-server',
+  );
+
   // Channel routes (will be added in Tutorial 06)
   static const RouteInfo channelView = RouteInfo(
     name: 'channel',
@@ -77,6 +82,10 @@ class Routes {
       serverDetails.name,
       pathParameters: {'serverId': serverId},
     );
+  }
+
+  static void goToCreateServer(BuildContext context) {
+    context.goNamed(createServer.name);
   }
 
   static void goToChannel(

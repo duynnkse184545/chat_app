@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/error/exceptions.dart';
 
-abstract class AuthLocalDatasource{
+abstract class AuthLocalDatasource {
   Future<void> cacheUser(UserModel userModel);
 
   Future<UserModel?> getCachedUser();
@@ -15,18 +15,19 @@ abstract class AuthLocalDatasource{
   Future<bool> hasCache();
 }
 
-class AuthLocalDatasourceImpl implements AuthLocalDatasource{
-  final SharedPreferences sharedPreferences;
+class AuthLocalDatasourceImpl implements AuthLocalDatasource {
+  final SharedPreferences _sharedPreferences;
   static const String _cachedUserKey = 'CACHED_USER';
 
-  AuthLocalDatasourceImpl({required this.sharedPreferences});
+  AuthLocalDatasourceImpl({required SharedPreferences sharedPreferences})
+    : _sharedPreferences = sharedPreferences;
 
   @override
   Future<void> cacheUser(UserModel userModel) async {
     try {
       final jsonString = json.encode(userModel.toJson());
-      await sharedPreferences.setString(_cachedUserKey, jsonString);
-    } catch(e){
+      await _sharedPreferences.setString(_cachedUserKey, jsonString);
+    } catch (e) {
       throw CacheException('Failed to cache user: ${e.toString()}');
     }
   }
@@ -34,8 +35,8 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource{
   @override
   Future<void> clearCache() async {
     try {
-      await sharedPreferences.clear();
-    } catch(e) {
+      await _sharedPreferences.remove(_cachedUserKey);
+    } catch (e) {
       throw CacheException('Failed to clear cache: ${e.toString()}');
     }
   }
@@ -43,9 +44,9 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource{
   @override
   Future<UserModel?> getCachedUser() async {
     try {
-      final jsonString = sharedPreferences.getString(_cachedUserKey);
+      final jsonString = _sharedPreferences.getString(_cachedUserKey);
 
-      if(jsonString == null) return null;
+      if (jsonString == null) return null;
 
       final jsonMap = json.decode(jsonString) as Map<String, dynamic>;
       return UserModel.fromJson(jsonMap);
@@ -56,7 +57,6 @@ class AuthLocalDatasourceImpl implements AuthLocalDatasource{
 
   @override
   Future<bool> hasCache() async {
-    return sharedPreferences.containsKey(_cachedUserKey);
+    return _sharedPreferences.containsKey(_cachedUserKey);
   }
-
 }

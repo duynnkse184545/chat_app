@@ -6,24 +6,6 @@ part of 'auth_providers.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$sharedPreferencesHash() => r'dc403fbb1d968c7d5ab4ae1721a29ffe173701c7';
-
-/// See also [sharedPreferences].
-@ProviderFor(sharedPreferences)
-final sharedPreferencesProvider =
-    AutoDisposeFutureProvider<SharedPreferences>.internal(
-      sharedPreferences,
-      name: r'sharedPreferencesProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$sharedPreferencesHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef SharedPreferencesRef = AutoDisposeFutureProviderRef<SharedPreferences>;
 String _$authRemoteDatasourceHash() =>
     r'5d05965213cbd1732616190c1d8144f6f27b1d14';
 

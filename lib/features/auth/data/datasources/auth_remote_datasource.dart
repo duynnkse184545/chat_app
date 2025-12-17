@@ -32,21 +32,22 @@ abstract class AuthRemoteDatasource {
 }
 
 class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
-  final FirebaseAuth firebaseAuth;
-  final FirebaseFirestore firebaseFirestore;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firebaseFirestore;
 
   AuthRemoteDatasourceImpl({
-    required this.firebaseAuth,
-    required this.firebaseFirestore,
-  });
+    required FirebaseAuth firebaseAuth,
+    required FirebaseFirestore firebaseFirestore,
+  }) : _firebaseAuth = firebaseAuth,
+       _firebaseFirestore = firebaseFirestore;
 
   @override
   Stream<UserModel?> authStateChanges() {
-    return firebaseAuth.authStateChanges().asyncMap((user) async {
+    return _firebaseAuth.authStateChanges().asyncMap((user) async {
       if (user == null) return null;
 
       try {
-        final userDoc = await firebaseFirestore
+        final userDoc = await _firebaseFirestore
             .collection(FirebaseConstants.usersCollection)
             .doc(user.uid)
             .get();
@@ -63,10 +64,10 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<UserModel?> getCurrentUser() async {
     try {
-      final currentUser = firebaseAuth.currentUser;
+      final currentUser = _firebaseAuth.currentUser;
       if (currentUser == null) return null;
 
-      final userDoc = await firebaseFirestore
+      final userDoc = await _firebaseFirestore
           .collection(FirebaseConstants.usersCollection)
           .doc(currentUser.uid)
           .get();
@@ -85,7 +86,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     required String password,
   }) async {
     try {
-      final userCredential = await firebaseAuth.signInWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
           email: email,
           password: password
       );
@@ -94,7 +95,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         throw AuthException('Failed to sign in!');
       }
 
-      final userDoc = await firebaseFirestore.collection(
+      final userDoc = await _firebaseFirestore.collection(
           FirebaseConstants.usersCollection)
           .doc(userCredential.user!.uid)
           .get();
@@ -103,9 +104,12 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         throw AuthException('User not found!');
       }
       return UserModel.fromJson(userDoc.data()!);
-    } on FirebaseAuthException catch (e) {
-      throw AuthException(_getAuthErrorMessage(e.code));
+    } on FirebaseAuthException catch (_) {
+      // Let FirebaseAuthException bubble up to repository for proper conversion
+      rethrow;
     } catch (e) {
+      // Only convert non-Firebase exceptions
+      if (e is AuthException) rethrow;
       throw AuthException('Failed to sign in: ${e.toString()}');
     }
   }
@@ -113,7 +117,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Future<void> signOut() async {
     try {
-      await firebaseAuth.signOut();
+      await _firebaseAuth.signOut();
     } catch (e) {
       if (e is AuthException) rethrow;
       throw AuthException('Failed to sign out!');
@@ -128,7 +132,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }) async {
     try {
       // Create Firebase Auth user first
-      final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email,
           password: password
       );
@@ -138,7 +142,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
       }
 
       // Now user is authenticated, we can check username
-      final userQuery = await firebaseFirestore
+      final userQuery = await _firebaseFirestore
           .collection(FirebaseConstants.usersCollection)
           .where('username', isEqualTo: username)
           .limit(1)
@@ -158,15 +162,17 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         createdAt: DateTime.now(),
       );
 
-      await firebaseFirestore
+      await _firebaseFirestore
           .collection(FirebaseConstants.usersCollection)
           .doc(userModel.uid)
           .set(userModel.toJson());
 
       return userModel;
-    } on FirebaseAuthException catch (e) {
-      throw AuthException(_getAuthErrorMessage(e.code));
+    } on FirebaseAuthException catch (_) {
+      // Let FirebaseAuthException bubble up to repository for proper conversion
+      rethrow;
     } catch(e) {
+      // Only convert non-Firebase exceptions
       if(e is AuthException) rethrow;
       throw AuthException('Failed to sign up: ${e.toString()}');
     }
@@ -189,11 +195,11 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
         throw AuthException('No fields to update!');
       }
 
-      await firebaseFirestore.collection(FirebaseConstants.usersCollection)
+      await _firebaseFirestore.collection(FirebaseConstants.usersCollection)
       .doc(uid)
       .update(updates);
 
-      final userDoc = await firebaseFirestore.collection(FirebaseConstants.usersCollection)
+      final userDoc = await _firebaseFirestore.collection(FirebaseConstants.usersCollection)
       .doc(uid)
       .get();
 
@@ -208,26 +214,4 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
     }
   }
 
-  String _getAuthErrorMessage(String code) {
-    switch (code) {
-      case 'user-not-found':
-        return 'No user found with this email';
-      case 'wrong-password':
-        return 'Incorrect password';
-      case 'email-already-in-use':
-        return 'Email is already registered';
-      case 'invalid-email':
-        return 'Invalid email address';
-      case 'weak-password':
-        return 'Password is too weak';
-      case 'user-disabled':
-        return 'This account has been disabled';
-      case 'too-many-requests':
-        return 'Too many attempts. Please try again later';
-      case 'network-request-failed':
-        throw NetworkException('Network error. Check your connection');
-      default:
-        return 'Authentication error: $code';
-    }
-  }
 }

@@ -1,0 +1,304 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'server_detail_state.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+// dart format off
+T _$identity<T>(T value) => value;
+/// @nodoc
+mixin _$ServerDetailState {
+
+ ServerEntity? get server; bool get isLoading; bool get isDeleting; String? get errorMessage;
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ServerDetailStateCopyWith<ServerDetailState> get copyWith => _$ServerDetailStateCopyWithImpl<ServerDetailState>(this as ServerDetailState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting,errorMessage);
+
+@override
+String toString() {
+  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting, errorMessage: $errorMessage)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ServerDetailStateCopyWith<$Res>  {
+  factory $ServerDetailStateCopyWith(ServerDetailState value, $Res Function(ServerDetailState) _then) = _$ServerDetailStateCopyWithImpl;
+@useResult
+$Res call({
+ ServerEntity? server, bool isLoading, bool isDeleting, String? errorMessage
+});
+
+
+$ServerEntityCopyWith<$Res>? get server;
+
+}
+/// @nodoc
+class _$ServerDetailStateCopyWithImpl<$Res>
+    implements $ServerDetailStateCopyWith<$Res> {
+  _$ServerDetailStateCopyWithImpl(this._self, this._then);
+
+  final ServerDetailState _self;
+  final $Res Function(ServerDetailState) _then;
+
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,Object? errorMessage = freezed,}) {
+  return _then(_self.copyWith(
+server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
+as ServerEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isDeleting: null == isDeleting ? _self.isDeleting : isDeleting // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ServerEntityCopyWith<$Res>? get server {
+    if (_self.server == null) {
+    return null;
+  }
+
+  return $ServerEntityCopyWith<$Res>(_self.server!, (value) {
+    return _then(_self.copyWith(server: value));
+  });
+}
+}
+
+
+/// Adds pattern-matching-related methods to [ServerDetailState].
+extension ServerDetailStatePatterns on ServerDetailState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _ServerDetailState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _ServerDetailState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _ServerDetailState value)  $default,){
+final _that = this;
+switch (_that) {
+case _ServerDetailState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _ServerDetailState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _ServerDetailState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _ServerDetailState() when $default != null:
+return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)  $default,) {final _that = this;
+switch (_that) {
+case _ServerDetailState():
+return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)?  $default,) {final _that = this;
+switch (_that) {
+case _ServerDetailState() when $default != null:
+return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _ServerDetailState implements ServerDetailState {
+  const _ServerDetailState({this.server, this.isLoading = false, this.isDeleting = false, this.errorMessage});
+  
+
+@override final  ServerEntity? server;
+@override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool isDeleting;
+@override final  String? errorMessage;
+
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ServerDetailStateCopyWith<_ServerDetailState> get copyWith => __$ServerDetailStateCopyWithImpl<_ServerDetailState>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting,errorMessage);
+
+@override
+String toString() {
+  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting, errorMessage: $errorMessage)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$ServerDetailStateCopyWith<$Res> implements $ServerDetailStateCopyWith<$Res> {
+  factory _$ServerDetailStateCopyWith(_ServerDetailState value, $Res Function(_ServerDetailState) _then) = __$ServerDetailStateCopyWithImpl;
+@override @useResult
+$Res call({
+ ServerEntity? server, bool isLoading, bool isDeleting, String? errorMessage
+});
+
+
+@override $ServerEntityCopyWith<$Res>? get server;
+
+}
+/// @nodoc
+class __$ServerDetailStateCopyWithImpl<$Res>
+    implements _$ServerDetailStateCopyWith<$Res> {
+  __$ServerDetailStateCopyWithImpl(this._self, this._then);
+
+  final _ServerDetailState _self;
+  final $Res Function(_ServerDetailState) _then;
+
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,Object? errorMessage = freezed,}) {
+  return _then(_ServerDetailState(
+server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
+as ServerEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,isDeleting: null == isDeleting ? _self.isDeleting : isDeleting // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+/// Create a copy of ServerDetailState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ServerEntityCopyWith<$Res>? get server {
+    if (_self.server == null) {
+    return null;
+  }
+
+  return $ServerEntityCopyWith<$Res>(_self.server!, (value) {
+    return _then(_self.copyWith(server: value));
+  });
+}
+}
+
+// dart format on
