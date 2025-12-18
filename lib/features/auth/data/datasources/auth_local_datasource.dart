@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:chat_app/features/auth/data/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/error/exceptions.dart';
+import 'package:chat_app/core/error/exceptions.dart';
 
 abstract class AuthLocalDatasource {
   Future<void> cacheUser(UserModel userModel);

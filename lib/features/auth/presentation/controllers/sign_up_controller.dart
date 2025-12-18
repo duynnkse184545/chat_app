@@ -1,7 +1,8 @@
+import 'package:chat_app/core/utils/validators.dart';
 import 'package:chat_app/features/auth/presentation/states/sign_up_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import 'auth_use_case_providers.dart';
+import 'package:chat_app/features/auth/presentation/controllers/auth_use_case_providers.dart';
 
 part 'sign_up_controller.g.dart';
 
@@ -12,22 +13,22 @@ class SignUpController extends _$SignUpController {
     return const SignUpState();
   }
 
-  void setUserName(String username) {
-    state = state.copyWith(username: username, errorMessage: null);
+  void setUsername(String username) {
+    state = state.copyWith(username: username, usernameError: null);
   }
 
   void setEmail(String email) {
-    state = state.copyWith(email: email, errorMessage: null);
+    state = state.copyWith(email: email, emailError: null);
   }
 
   void setPassword(String password) {
-    state = state.copyWith(password: password, errorMessage: null);
+    state = state.copyWith(password: password, passwordError: null);
   }
 
   void setConfirmPassword(String confirmPassword) {
     state = state.copyWith(
       confirmPassword: confirmPassword,
-      errorMessage: null,
+      generalError: null,
     );
   }
 
@@ -41,26 +42,28 @@ class SignUpController extends _$SignUpController {
     );
   }
 
-  Future<bool> signUp() async {
-    if (state.username.isEmpty) {
-      state = state.copyWith(errorMessage: 'Username is required!');
-      return false;
-    }
-    if (state.email.isEmpty) {
-      state = state.copyWith(errorMessage: 'Email is required!');
-      return false;
-    }
+  bool _validate() {
+    final usernameError = Validators.username(state.username);
+    final emailError = Validators.email(state.email);
+    final passwordError = Validators.password(state.password);
 
-    if (state.password.isEmpty) {
-      state = state.copyWith(errorMessage: 'Password is required!');
-      return false;
-    }
+    state = state.copyWith(
+      emailError: emailError,
+      passwordError: passwordError,
+      generalError: null,
+    );
 
     if (state.confirmPassword != state.password) {
-      state = state.copyWith(errorMessage: 'Passwords do not match!');
+      state = state.copyWith(generalError: 'Passwords do not match!');
     }
 
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    return usernameError == null && emailError == null && passwordError == null;
+  }
+
+  Future<bool> signUp() async {
+    if (!_validate()) return false;
+
+    state = state.copyWith(isLoading: true, generalError: null);
 
     final signUpUseCase = await ref.read(signUpUseCaseProvider.future);
     final result = await signUpUseCase(
@@ -71,7 +74,7 @@ class SignUpController extends _$SignUpController {
 
     return result.fold(
       (failure) {
-        state = state.copyWith(isLoading: false, errorMessage: failure.message);
+        state = state.copyWith(isLoading: false, generalError: failure.message);
         return false;
       },
       (user) {

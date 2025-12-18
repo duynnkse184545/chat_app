@@ -9,6 +9,8 @@ abstract class SignInState with _$SignInState {
     @Default('') String password,
     @Default(false) bool isPasswordVisible,
     @Default(false) bool isLoading,
-    String? errorMessage,
+    String? emailError,
+    String? passwordError,
+    String? generalError,
 }) = _SignInState;
 }

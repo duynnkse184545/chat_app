@@ -1,27 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_list_controller.dart';
+part of 'create_server_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$serverListControllerHash() =>
-    r'd565a8d22d948ad41385787df9f5f239fa460e0a';
+String _$createServerControllerHash() =>
+    r'7fb742187e1fc01eed290a223bf7dd697b84ff88';
 
-/// See also [ServerListController].
-@ProviderFor(ServerListController)
-final serverListControllerProvider =
-    AutoDisposeNotifierProvider<ServerListController, ServerListState>.internal(
-      ServerListController.new,
-      name: r'serverListControllerProvider',
+/// See also [CreateServerController].
+@ProviderFor(CreateServerController)
+final createServerControllerProvider =
+    AutoDisposeNotifierProvider<
+      CreateServerController,
+      CreateServerState
+    >.internal(
+      CreateServerController.new,
+      name: r'createServerControllerProvider',
       debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
           ? null
-          : _$serverListControllerHash,
+          : _$createServerControllerHash,
       dependencies: null,
       allTransitiveDependencies: null,
     );
 
-typedef _$ServerListController = AutoDisposeNotifier<ServerListState>;
+typedef _$CreateServerController = AutoDisposeNotifier<CreateServerState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

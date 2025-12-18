@@ -4,8 +4,8 @@ import 'package:chat_app/features/auth/presentation/controllers/auth_providers.d
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/usecases/sign_out_usecase.dart';
-import '../../domain/usecases/sign_up_usecase.dart';
+import 'package:chat_app/features/auth/domain/usecases/sign_out_usecase.dart';
+import 'package:chat_app/features/auth/domain/usecases/sign_up_usecase.dart';
 
 part 'auth_use_case_providers.g.dart';
 

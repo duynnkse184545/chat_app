@@ -4,7 +4,7 @@ import 'package:chat_app/features/auth/presentation/controllers/sign_in_controll
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/route_constants.dart';
+import 'package:chat_app/core/constants/route_constants.dart';
 
 class SignInScreen extends ConsumerWidget {
 
@@ -20,7 +20,7 @@ class SignInScreen extends ConsumerWidget {
       debugPrint('✅ Sign-in handler: Success, navigating to home...');
       Routes.goToHome(context);
     } else {
-      final errorMessage = ref.read(signInControllerProvider).errorMessage;
+      final errorMessage = ref.read(signInControllerProvider).generalError;
       if (errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -76,10 +76,11 @@ class SignInScreen extends ConsumerWidget {
               onChanged: controller.setEmail,
               keyboardType: TextInputType.emailAddress,
               style: const TextStyle(color: AppColors.textPrimary),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Email',
-                hintStyle: TextStyle(color: AppColors.textSecondary),
-                prefixIcon: Icon(Icons.email_outlined, color: AppColors.textMuted ,
+                errorText: state.emailError,
+                hintStyle: const TextStyle(color: AppColors.textSecondary),
+                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.textMuted ,
                 ),
               ),
             ),
@@ -91,6 +92,7 @@ class SignInScreen extends ConsumerWidget {
               style: const TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 hintText: 'Password',
+                errorText: state.passwordError,
                 prefixIcon: const Icon(Icons.lock_outline, color: AppColors.textMuted,),
                 suffixIcon: IconButton(
                   onPressed: controller.togglePasswordVisibility,
@@ -103,11 +105,11 @@ class SignInScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24,),
 
-            if(state.errorMessage != null)
+            if(state.generalError != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Text(
-                  state.errorMessage!,
+                  state.generalError!,
                   style: const TextStyle(
                     color: AppColors.dangerColor,
                     fontSize: 14,

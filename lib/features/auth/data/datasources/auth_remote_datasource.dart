@@ -3,7 +3,7 @@ import 'package:chat_app/features/auth/data/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/error/exceptions.dart';
+import 'package:chat_app/core/error/exceptions.dart';
 
 abstract class AuthRemoteDatasource {
   Future<UserModel> signInWithEmailAndPassword({

@@ -1,8 +1,8 @@
 import 'package:chat_app/features/server/domain/entities/server_entity.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants/route_constants.dart';
-import '../../../../core/theme/app_colors.dart';
+import 'package:chat_app/core/constants/route_constants.dart';
+import 'package:chat_app/core/theme/app_colors.dart';
 
 class ServerCard extends StatelessWidget {
   final ServerEntity server;

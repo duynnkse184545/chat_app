@@ -2,9 +2,9 @@ import 'package:chat_app/features/auth/presentation/controllers/sign_up_controll
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/constants/route_constants.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/loader.dart';
+import 'package:chat_app/core/constants/route_constants.dart';
+import 'package:chat_app/core/theme/app_colors.dart';
+import 'package:chat_app/core/widgets/loader.dart';
 
 class SignUpScreen extends ConsumerWidget {
   const SignUpScreen({super.key});
@@ -17,7 +17,7 @@ class SignUpScreen extends ConsumerWidget {
     } else if (!success && context.mounted) {
       final errorMessage = ref
           .read(signUpControllerProvider)
-          .errorMessage;
+          .generalError;
       if (errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -37,7 +37,7 @@ class SignUpScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -71,12 +71,13 @@ class SignUpScreen extends ConsumerWidget {
                 const SizedBox(height: 48,),
 
                 TextField(
-                    onChanged: controller.setUserName,
+                    onChanged: controller.setUsername,
                     style: const TextStyle(color: AppColors.textPrimary),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                         hintText: 'Username',
-                        hintStyle: TextStyle(color: AppColors.textSecondary),
-                        prefixIcon: Icon(
+                        errorText: state.usernameError,
+                        hintStyle: const TextStyle(color: AppColors.textSecondary),
+                        prefixIcon: const Icon(
                           Icons.person_outline,
                           color: AppColors.textMuted,
                         )
@@ -88,11 +89,12 @@ class SignUpScreen extends ConsumerWidget {
                   onChanged: controller.setEmail,
                   keyboardType: TextInputType.emailAddress,
                   style: const TextStyle(color: AppColors.textPrimary),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       hintText: 'Email',
-                      hintStyle: TextStyle(
+                      errorText: state.emailError,
+                      hintStyle: const TextStyle(
                           color: AppColors.textSecondary),
-                      prefixIcon: Icon(
+                      prefixIcon: const Icon(
                         Icons.email_outlined,
                         color: AppColors.textMuted,
                       )
@@ -121,11 +123,11 @@ class SignUpScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 24,),
 
-                if(state.errorMessage != null)
+                if(state.generalError != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
-                      state.errorMessage!,
+                      state.generalError!,
                       style: const TextStyle(
                         color: AppColors.dangerColor,
                         fontSize: 14,

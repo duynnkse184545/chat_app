@@ -1,8 +1,9 @@
+import 'package:chat_app/core/utils/validators.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../states/sign_in_state.dart';
-import 'auth_use_case_providers.dart';
+import 'package:chat_app/features/auth/presentation/states/sign_in_state.dart';
+import 'package:chat_app/features/auth/presentation/controllers/auth_use_case_providers.dart';
 
 part 'sign_in_controller.g.dart';
 
@@ -14,29 +15,34 @@ class SignInController extends _$SignInController {
   }
 
   void setEmail(String email) {
-    state = state.copyWith(email: email, errorMessage: null);
+    state = state.copyWith(email: email, emailError: null);
   }
 
   void setPassword(String password) {
-    state = state.copyWith(password: password, errorMessage: null);
+    state = state.copyWith(password: password, passwordError: null);
   }
 
   void togglePasswordVisibility() {
     state = state.copyWith(isPasswordVisible: !state.isPasswordVisible);
   }
 
+  bool _validate() {
+    final emailError = Validators.email(state.email);
+    final passwordError = Validators.password(state.password);
+
+    state = state.copyWith(
+      emailError: emailError,
+      passwordError: passwordError,
+      generalError: null,
+    );
+
+    return emailError == null && passwordError == null;
+  }
+
   Future<bool> signIn() async {
-    if (state.email.isEmpty) {
-      state = state.copyWith(errorMessage: 'Email is required!');
-      return false;
-    }
+    if (!_validate()) return false;
 
-    if (state.password.isEmpty) {
-      state = state.copyWith(errorMessage: 'Password is required!');
-      return false;
-    }
-
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    state = state.copyWith(isLoading: true, generalError: null);
 
     final signInUseCase = await ref.read(signInUseCaseProvider.future);
     final result = await signInUseCase(
@@ -47,7 +53,7 @@ class SignInController extends _$SignInController {
     return result.fold(
       (failure) {
         debugPrint('🔴 Sign-in failed: ${failure.message}');
-        state = state.copyWith(isLoading: false, errorMessage: failure.message);
+        state = state.copyWith(isLoading: false, generalError: failure.message);
         return false;
       },
       (user) {

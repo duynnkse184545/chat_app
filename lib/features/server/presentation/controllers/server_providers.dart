@@ -2,16 +2,16 @@ import 'package:chat_app/features/server/data/datasources/server_remote_datasour
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/providers/firebase_providers.dart';
-import '../../../../core/providers/shared_providers.dart';
-import '../../data/datasources/server_local_datasource.dart';
-import '../../data/repositories/server_repository_impl.dart';
-import '../../domain/repository/server_repository.dart';
-import '../../domain/usecases/create_server_usecase.dart';
-import '../../domain/usecases/delete_server_usecase.dart';
-import '../../domain/usecases/get_server_usecase.dart';
-import '../../domain/usecases/get_user_servers_usecase.dart';
-import '../../domain/usecases/update_server_usecase.dart';
+import 'package:chat_app/core/providers/firebase_providers.dart';
+import 'package:chat_app/core/providers/shared_providers.dart';
+import 'package:chat_app/features/server/data/datasources/server_local_datasource.dart';
+import 'package:chat_app/features/server/data/repositories/server_repository_impl.dart';
+import 'package:chat_app/features/server/domain/repository/server_repository.dart';
+import 'package:chat_app/features/server/domain/usecases/create_server_usecase.dart';
+import 'package:chat_app/features/server/domain/usecases/delete_server_usecase.dart';
+import 'package:chat_app/features/server/domain/usecases/get_server_usecase.dart';
+import 'package:chat_app/features/server/domain/usecases/get_user_servers_usecase.dart';
+import 'package:chat_app/features/server/domain/usecases/update_server_usecase.dart';
 
 part 'server_providers.g.dart';
 

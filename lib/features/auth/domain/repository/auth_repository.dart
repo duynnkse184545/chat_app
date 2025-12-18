@@ -1,6 +1,6 @@
 import 'package:chat_app/core/utils/type_defs.dart';
 
-import '../entities/user_entity.dart';
+import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 
 abstract class AuthRepository {
   FutureEither<UserEntity> signInWithEmailAndPassword({

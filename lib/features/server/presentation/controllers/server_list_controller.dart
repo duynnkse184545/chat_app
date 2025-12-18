@@ -33,31 +33,4 @@ class ServerListController extends _$ServerListController {
     );
   }
 
-  Future<bool> createServer({
-    required String name,
-    required String description,
-    String? iconUrl,
-  }) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-
-    final createServerUseCase = await ref.read(
-      createServerUseCaseProvider.future,
-    );
-    final result = await createServerUseCase(
-      name: name,
-      description: description,
-      iconUrl: iconUrl,
-    );
-
-    return result.fold(
-      (failure) {
-        state = state.copyWith(isLoading: true, errorMessage: failure.message);
-        return false;
-      },
-      (_) {
-        loadServers();
-        return true;
-      },
-    );
-  }
 }

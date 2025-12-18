@@ -2,8 +2,8 @@ import 'package:chat_app/core/constants/firebase_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../../../core/error/exceptions.dart';
-import '../models/server_model.dart';
+import 'package:chat_app/core/error/exceptions.dart';
+import 'package:chat_app/features/server/data/models/server_model.dart';
 
 abstract class ServerRemoteDatasource {
   Future<ServerModel> createServer({

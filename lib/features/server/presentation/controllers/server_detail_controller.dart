@@ -1,7 +1,7 @@
 import 'package:chat_app/features/server/presentation/controllers/server_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../states/server_detail_state.dart';
+import 'package:chat_app/features/server/presentation/states/server_detail_state.dart';
 
 part 'server_detail_controller.g.dart';
 

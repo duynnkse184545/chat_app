@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SignInState {
 
- String get email; String get password; bool get isPasswordVisible; bool get isLoading; String? get errorMessage;
+ String get email; String get password; bool get isPasswordVisible; bool get isLoading; String? get emailError; String? get passwordError; String? get generalError;
 /// Create a copy of SignInState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SignInStateCopyWith<SignInState> get copyWith => _$SignInStateCopyWithImpl<Sign
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignInState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignInState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.generalError, generalError) || other.generalError == generalError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,isPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,email,password,isPasswordVisible,isLoading,emailError,passwordError,generalError);
 
 @override
 String toString() {
-  return 'SignInState(email: $email, password: $password, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'SignInState(email: $email, password: $password, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, emailError: $emailError, passwordError: $passwordError, generalError: $generalError)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SignInStateCopyWith<$Res>  {
   factory $SignInStateCopyWith(SignInState value, $Res Function(SignInState) _then) = _$SignInStateCopyWithImpl;
 @useResult
 $Res call({
- String email, String password, bool isPasswordVisible, bool isLoading, String? errorMessage
+ String email, String password, bool isPasswordVisible, bool isLoading, String? emailError, String? passwordError, String? generalError
 });
 
 
@@ -62,13 +62,15 @@ class _$SignInStateCopyWithImpl<$Res>
 
 /// Create a copy of SignInState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? password = null,Object? isPasswordVisible = null,Object? isLoading = null,Object? emailError = freezed,Object? passwordError = freezed,Object? generalError = freezed,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable
+as String?,passwordError: freezed == passwordError ? _self.passwordError : passwordError // ignore: cast_nullable_to_non_nullable
+as String?,generalError: freezed == generalError ? _self.generalError : generalError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -154,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? emailError,  String? passwordError,  String? generalError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SignInState() when $default != null:
-return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.emailError,_that.passwordError,_that.generalError);case _:
   return orElse();
 
 }
@@ -175,10 +177,10 @@ return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoadi
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? emailError,  String? passwordError,  String? generalError)  $default,) {final _that = this;
 switch (_that) {
 case _SignInState():
-return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.emailError,_that.passwordError,_that.generalError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +197,10 @@ return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoadi
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String password,  bool isPasswordVisible,  bool isLoading,  String? emailError,  String? passwordError,  String? generalError)?  $default,) {final _that = this;
 switch (_that) {
 case _SignInState() when $default != null:
-return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoading,_that.emailError,_that.passwordError,_that.generalError);case _:
   return null;
 
 }
@@ -210,14 +212,16 @@ return $default(_that.email,_that.password,_that.isPasswordVisible,_that.isLoadi
 
 
 class _SignInState implements SignInState {
-  const _SignInState({this.email = '', this.password = '', this.isPasswordVisible = false, this.isLoading = false, this.errorMessage});
+  const _SignInState({this.email = '', this.password = '', this.isPasswordVisible = false, this.isLoading = false, this.emailError, this.passwordError, this.generalError});
   
 
 @override@JsonKey() final  String email;
 @override@JsonKey() final  String password;
 @override@JsonKey() final  bool isPasswordVisible;
 @override@JsonKey() final  bool isLoading;
-@override final  String? errorMessage;
+@override final  String? emailError;
+@override final  String? passwordError;
+@override final  String? generalError;
 
 /// Create a copy of SignInState
 /// with the given fields replaced by the non-null parameter values.
@@ -229,16 +233,16 @@ _$SignInStateCopyWith<_SignInState> get copyWith => __$SignInStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignInState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignInState&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.generalError, generalError) || other.generalError == generalError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,email,password,isPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,email,password,isPasswordVisible,isLoading,emailError,passwordError,generalError);
 
 @override
 String toString() {
-  return 'SignInState(email: $email, password: $password, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'SignInState(email: $email, password: $password, isPasswordVisible: $isPasswordVisible, isLoading: $isLoading, emailError: $emailError, passwordError: $passwordError, generalError: $generalError)';
 }
 
 
@@ -249,7 +253,7 @@ abstract mixin class _$SignInStateCopyWith<$Res> implements $SignInStateCopyWith
   factory _$SignInStateCopyWith(_SignInState value, $Res Function(_SignInState) _then) = __$SignInStateCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String password, bool isPasswordVisible, bool isLoading, String? errorMessage
+ String email, String password, bool isPasswordVisible, bool isLoading, String? emailError, String? passwordError, String? generalError
 });
 
 
@@ -266,13 +270,15 @@ class __$SignInStateCopyWithImpl<$Res>
 
 /// Create a copy of SignInState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? isPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? password = null,Object? isPasswordVisible = null,Object? isLoading = null,Object? emailError = freezed,Object? passwordError = freezed,Object? generalError = freezed,}) {
   return _then(_SignInState(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
 as String,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable
+as String?,passwordError: freezed == passwordError ? _self.passwordError : passwordError // ignore: cast_nullable_to_non_nullable
+as String?,generalError: freezed == generalError ? _self.generalError : generalError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

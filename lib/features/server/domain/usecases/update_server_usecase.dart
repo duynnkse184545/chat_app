@@ -1,5 +1,4 @@
 import 'package:chat_app/core/utils/type_defs.dart';
-import 'package:chat_app/features/server/domain/entities/server_entity.dart';
 import 'package:chat_app/features/server/domain/repository/server_repository.dart';
 
 class UpdateServerUseCase {

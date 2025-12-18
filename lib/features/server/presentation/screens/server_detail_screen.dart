@@ -4,8 +4,8 @@ import 'package:chat_app/core/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../controllers/server_detail_controller.dart';
+import 'package:chat_app/core/theme/app_colors.dart';
+import 'package:chat_app/features/server/presentation/controllers/server_detail_controller.dart';
 
 class ServerDetailScreen extends ConsumerWidget {
   final String serverId;

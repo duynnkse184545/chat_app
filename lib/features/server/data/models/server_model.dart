@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../../core/utils/json_converters.dart';
-import '../../domain/entities/server_entity.dart';
+import 'package:chat_app/core/utils/json_converters.dart';
+import 'package:chat_app/features/server/domain/entities/server_entity.dart';
 
 part 'server_model.freezed.dart';
 part 'server_model.g.dart';

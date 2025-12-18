@@ -6,8 +6,8 @@ import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/providers/shared_providers.dart';
-import '../../domain/repository/auth_repository.dart';
+import 'package:chat_app/core/providers/shared_providers.dart';
+import 'package:chat_app/features/auth/domain/repository/auth_repository.dart';
 
 part 'auth_providers.g.dart';
 

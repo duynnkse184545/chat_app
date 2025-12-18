@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SignUpState {
 
- String get username; String get email; String get password; String get confirmPassword; bool get isPasswordVisible; bool get isConfirmPasswordVisible; bool get isLoading; String? get errorMessage;
+ String get username; String get email; String get password; String get confirmPassword; bool get isPasswordVisible; bool get isConfirmPasswordVisible; bool get isLoading; String? get usernameError; String? get emailError; String? get passwordError; String? get generalError;
 /// Create a copy of SignUpState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SignUpStateCopyWith<SignUpState> get copyWith => _$SignUpStateCopyWithImpl<Sign
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignUpState&&(identical(other.username, username) || other.username == username)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isConfirmPasswordVisible, isConfirmPasswordVisible) || other.isConfirmPasswordVisible == isConfirmPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SignUpState&&(identical(other.username, username) || other.username == username)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isConfirmPasswordVisible, isConfirmPasswordVisible) || other.isConfirmPasswordVisible == isConfirmPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.usernameError, usernameError) || other.usernameError == usernameError)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.generalError, generalError) || other.generalError == generalError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,username,email,password,confirmPassword,isPasswordVisible,isConfirmPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,username,email,password,confirmPassword,isPasswordVisible,isConfirmPasswordVisible,isLoading,usernameError,emailError,passwordError,generalError);
 
 @override
 String toString() {
-  return 'SignUpState(username: $username, email: $email, password: $password, confirmPassword: $confirmPassword, isPasswordVisible: $isPasswordVisible, isConfirmPasswordVisible: $isConfirmPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'SignUpState(username: $username, email: $email, password: $password, confirmPassword: $confirmPassword, isPasswordVisible: $isPasswordVisible, isConfirmPasswordVisible: $isConfirmPasswordVisible, isLoading: $isLoading, usernameError: $usernameError, emailError: $emailError, passwordError: $passwordError, generalError: $generalError)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SignUpStateCopyWith<$Res>  {
   factory $SignUpStateCopyWith(SignUpState value, $Res Function(SignUpState) _then) = _$SignUpStateCopyWithImpl;
 @useResult
 $Res call({
- String username, String email, String password, String confirmPassword, bool isPasswordVisible, bool isConfirmPasswordVisible, bool isLoading, String? errorMessage
+ String username, String email, String password, String confirmPassword, bool isPasswordVisible, bool isConfirmPasswordVisible, bool isLoading, String? usernameError, String? emailError, String? passwordError, String? generalError
 });
 
 
@@ -62,7 +62,7 @@ class _$SignUpStateCopyWithImpl<$Res>
 
 /// Create a copy of SignUpState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isPasswordVisible = null,Object? isConfirmPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isPasswordVisible = null,Object? isConfirmPasswordVisible = null,Object? isLoading = null,Object? usernameError = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? generalError = freezed,}) {
   return _then(_self.copyWith(
 username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -71,7 +71,10 @@ as String,confirmPassword: null == confirmPassword ? _self.confirmPassword : con
 as String,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isConfirmPasswordVisible: null == isConfirmPasswordVisible ? _self.isConfirmPasswordVisible : isConfirmPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,usernameError: freezed == usernameError ? _self.usernameError : usernameError // ignore: cast_nullable_to_non_nullable
+as String?,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable
+as String?,passwordError: freezed == passwordError ? _self.passwordError : passwordError // ignore: cast_nullable_to_non_nullable
+as String?,generalError: freezed == generalError ? _self.generalError : generalError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -157,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? usernameError,  String? emailError,  String? passwordError,  String? generalError)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SignUpState() when $default != null:
-return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.usernameError,_that.emailError,_that.passwordError,_that.generalError);case _:
   return orElse();
 
 }
@@ -178,10 +181,10 @@ return $default(_that.username,_that.email,_that.password,_that.confirmPassword,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? usernameError,  String? emailError,  String? passwordError,  String? generalError)  $default,) {final _that = this;
 switch (_that) {
 case _SignUpState():
-return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.usernameError,_that.emailError,_that.passwordError,_that.generalError);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +201,10 @@ return $default(_that.username,_that.email,_that.password,_that.confirmPassword,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String username,  String email,  String password,  String confirmPassword,  bool isPasswordVisible,  bool isConfirmPasswordVisible,  bool isLoading,  String? usernameError,  String? emailError,  String? passwordError,  String? generalError)?  $default,) {final _that = this;
 switch (_that) {
 case _SignUpState() when $default != null:
-return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.errorMessage);case _:
+return $default(_that.username,_that.email,_that.password,_that.confirmPassword,_that.isPasswordVisible,_that.isConfirmPasswordVisible,_that.isLoading,_that.usernameError,_that.emailError,_that.passwordError,_that.generalError);case _:
   return null;
 
 }
@@ -213,7 +216,7 @@ return $default(_that.username,_that.email,_that.password,_that.confirmPassword,
 
 
 class _SignUpState implements SignUpState {
-  const _SignUpState({this.username = '', this.email = '', this.password = '', this.confirmPassword = '', this.isPasswordVisible = false, this.isConfirmPasswordVisible = false, this.isLoading = false, this.errorMessage});
+  const _SignUpState({this.username = '', this.email = '', this.password = '', this.confirmPassword = '', this.isPasswordVisible = false, this.isConfirmPasswordVisible = false, this.isLoading = false, this.usernameError, this.emailError, this.passwordError, this.generalError});
   
 
 @override@JsonKey() final  String username;
@@ -223,7 +226,10 @@ class _SignUpState implements SignUpState {
 @override@JsonKey() final  bool isPasswordVisible;
 @override@JsonKey() final  bool isConfirmPasswordVisible;
 @override@JsonKey() final  bool isLoading;
-@override final  String? errorMessage;
+@override final  String? usernameError;
+@override final  String? emailError;
+@override final  String? passwordError;
+@override final  String? generalError;
 
 /// Create a copy of SignUpState
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +241,16 @@ _$SignUpStateCopyWith<_SignUpState> get copyWith => __$SignUpStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignUpState&&(identical(other.username, username) || other.username == username)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isConfirmPasswordVisible, isConfirmPasswordVisible) || other.isConfirmPasswordVisible == isConfirmPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SignUpState&&(identical(other.username, username) || other.username == username)&&(identical(other.email, email) || other.email == email)&&(identical(other.password, password) || other.password == password)&&(identical(other.confirmPassword, confirmPassword) || other.confirmPassword == confirmPassword)&&(identical(other.isPasswordVisible, isPasswordVisible) || other.isPasswordVisible == isPasswordVisible)&&(identical(other.isConfirmPasswordVisible, isConfirmPasswordVisible) || other.isConfirmPasswordVisible == isConfirmPasswordVisible)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.usernameError, usernameError) || other.usernameError == usernameError)&&(identical(other.emailError, emailError) || other.emailError == emailError)&&(identical(other.passwordError, passwordError) || other.passwordError == passwordError)&&(identical(other.generalError, generalError) || other.generalError == generalError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,username,email,password,confirmPassword,isPasswordVisible,isConfirmPasswordVisible,isLoading,errorMessage);
+int get hashCode => Object.hash(runtimeType,username,email,password,confirmPassword,isPasswordVisible,isConfirmPasswordVisible,isLoading,usernameError,emailError,passwordError,generalError);
 
 @override
 String toString() {
-  return 'SignUpState(username: $username, email: $email, password: $password, confirmPassword: $confirmPassword, isPasswordVisible: $isPasswordVisible, isConfirmPasswordVisible: $isConfirmPasswordVisible, isLoading: $isLoading, errorMessage: $errorMessage)';
+  return 'SignUpState(username: $username, email: $email, password: $password, confirmPassword: $confirmPassword, isPasswordVisible: $isPasswordVisible, isConfirmPasswordVisible: $isConfirmPasswordVisible, isLoading: $isLoading, usernameError: $usernameError, emailError: $emailError, passwordError: $passwordError, generalError: $generalError)';
 }
 
 
@@ -255,7 +261,7 @@ abstract mixin class _$SignUpStateCopyWith<$Res> implements $SignUpStateCopyWith
   factory _$SignUpStateCopyWith(_SignUpState value, $Res Function(_SignUpState) _then) = __$SignUpStateCopyWithImpl;
 @override @useResult
 $Res call({
- String username, String email, String password, String confirmPassword, bool isPasswordVisible, bool isConfirmPasswordVisible, bool isLoading, String? errorMessage
+ String username, String email, String password, String confirmPassword, bool isPasswordVisible, bool isConfirmPasswordVisible, bool isLoading, String? usernameError, String? emailError, String? passwordError, String? generalError
 });
 
 
@@ -272,7 +278,7 @@ class __$SignUpStateCopyWithImpl<$Res>
 
 /// Create a copy of SignUpState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isPasswordVisible = null,Object? isConfirmPasswordVisible = null,Object? isLoading = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? email = null,Object? password = null,Object? confirmPassword = null,Object? isPasswordVisible = null,Object? isConfirmPasswordVisible = null,Object? isLoading = null,Object? usernameError = freezed,Object? emailError = freezed,Object? passwordError = freezed,Object? generalError = freezed,}) {
   return _then(_SignUpState(
 username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -281,7 +287,10 @@ as String,confirmPassword: null == confirmPassword ? _self.confirmPassword : con
 as String,isPasswordVisible: null == isPasswordVisible ? _self.isPasswordVisible : isPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isConfirmPasswordVisible: null == isConfirmPasswordVisible ? _self.isConfirmPasswordVisible : isConfirmPasswordVisible // ignore: cast_nullable_to_non_nullable
 as bool,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,usernameError: freezed == usernameError ? _self.usernameError : usernameError // ignore: cast_nullable_to_non_nullable
+as String?,emailError: freezed == emailError ? _self.emailError : emailError // ignore: cast_nullable_to_non_nullable
+as String?,passwordError: freezed == passwordError ? _self.passwordError : passwordError // ignore: cast_nullable_to_non_nullable
+as String?,generalError: freezed == generalError ? _self.generalError : generalError // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

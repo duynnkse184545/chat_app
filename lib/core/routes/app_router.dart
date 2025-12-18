@@ -4,18 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/controllers/auth_providers.dart';
-import '../../features/auth/presentation/screens/home_screen.dart';
-import '../../features/auth/presentation/screens/sign_in_screen.dart';
-import '../../features/auth/presentation/screens/sign_up_screen.dart';
-import '../constants/route_constants.dart';
+import 'package:chat_app/features/auth/presentation/controllers/auth_providers.dart';
+import 'package:chat_app/features/auth/presentation/screens/home_screen.dart';
+import 'package:chat_app/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:chat_app/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:chat_app/features/server/presentation/screens/create_server_screen.dart';
+import 'package:chat_app/features/server/presentation/screens/server_detail_screen.dart';
+import 'package:chat_app/features/server/presentation/screens/server_list_screen.dart';
+
+import 'package:chat_app/core/constants/route_constants.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateChangesProvider);
 
   return GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: '/',
+    initialLocation: Routes.home.path,
     redirect: (context, state) {
       final isLoading = authState.isLoading;
       final isAuthenticated = authState.value != null;
@@ -31,7 +35,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
 
       // If authenticated and not on home, go to home
-      if (isAuthenticated && currentPath != Routes.home.path) {
+      if (isAuthenticated && isOnAuthPage) {
         debugPrint('🏠 Redirecting authenticated user to home');
         return Routes.home.path;
       }

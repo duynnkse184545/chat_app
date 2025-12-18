@@ -1,6 +1,6 @@
 import 'package:chat_app/features/server/domain/repository/server_repository.dart';
 
-import '../../../../core/utils/type_defs.dart';
+import 'package:chat_app/core/utils/type_defs.dart';
 
 class DeleteServerUseCase {
   final ServerRepository _repository;

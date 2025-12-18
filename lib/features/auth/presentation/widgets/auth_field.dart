@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/theme/app_colors.dart';
+import 'package:chat_app/core/theme/app_colors.dart';
 
 class AuthField extends StatelessWidget {
   final TextEditingController controller;

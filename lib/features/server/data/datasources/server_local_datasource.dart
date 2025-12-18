@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/error/exceptions.dart';
-import '../models/server_model.dart';
+import 'package:chat_app/core/error/exceptions.dart';
+import 'package:chat_app/features/server/data/models/server_model.dart';
 
 abstract class ServerLocalDatasource {
   Future<void> cacheServers(List<ServerModel> servers);

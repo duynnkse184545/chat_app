@@ -12,6 +12,9 @@ abstract class SignUpState with _$SignUpState{
     @Default(false) bool isPasswordVisible,
     @Default(false) bool isConfirmPasswordVisible,
     @Default(false) bool isLoading,
-    String? errorMessage,
+    String? usernameError,
+    String? emailError,
+    String? passwordError,
+    String? generalError,
 }) = _SignUpState;
 }

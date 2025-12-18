@@ -5,8 +5,8 @@ import 'package:chat_app/features/server/presentation/controllers/server_list_co
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../widgets/server_card.dart';
+import 'package:chat_app/core/theme/app_colors.dart';
+import 'package:chat_app/features/server/presentation/widgets/server_card.dart';
 
 class ServerListScreen extends ConsumerWidget {
   const ServerListScreen({super.key});

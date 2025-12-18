@@ -3,8 +3,8 @@ import 'package:chat_app/core/utils/type_defs.dart';
 import 'package:chat_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/constants/app_constants.dart';
-import '../entities/user_entity.dart';
+import 'package:chat_app/core/constants/app_constants.dart';
+import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
 
 class SignUpUseCase{
   final AuthRepository authRepository;

@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
-import '../error/exceptions.dart';
-import '../error/failures.dart';
+import 'package:chat_app/core/error/exceptions.dart';
+import 'package:chat_app/core/error/failures.dart';
 
 /// Centralized error handling utility for repositories.
 /// 
