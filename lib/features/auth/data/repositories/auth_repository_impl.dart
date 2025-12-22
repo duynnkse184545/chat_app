@@ -89,7 +89,7 @@ class AuthRepositoryImpl implements AuthRepository {
       if (userModel == null) return const Right(null);
 
       // Cache the user but don't fail if caching fails
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => localDatasource.cacheUser(userModel),
         'Cache user on getCurrentUser',
       );
@@ -116,7 +116,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       // Cache user but don't fail sign-in if caching fails
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => localDatasource.cacheUser(userModel),
         'Cache user on sign-in',
       );
@@ -135,14 +135,14 @@ class AuthRepositoryImpl implements AuthRepository {
   FutureVoid signOut() async {
     try {
       await remoteDatasource.signOut();
-      
+
       // Try to clear cache but don't fail sign-out if it fails
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => localDatasource.clearCache(),
         'Clear cache on sign-out',
       );
 
-      return const Right(unit);
+      return const Right(null);
     } on FirebaseAuthException catch (e) {
       return Left(_convertAuthException(e));
     } on FirebaseException catch (e) {
@@ -166,7 +166,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       // Cache user but don't fail sign-up if caching fails
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => localDatasource.cacheUser(userModel),
         'Cache user on sign-up',
       );
@@ -197,7 +197,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       // Cache user but don't fail update if caching fails
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => localDatasource.cacheUser(userModel),
         'Cache user on profile update',
       );

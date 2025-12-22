@@ -10,6 +10,5 @@ abstract class ServerDetailState with _$ServerDetailState {
     ServerEntity? server,
     @Default(false) bool isLoading,
     @Default(false) bool isDeleting,
-    String? errorMessage,
   }) = _ServerDetailState;
 }

@@ -7,7 +7,7 @@ part of 'server_detail_controller.dart';
 // **************************************************************************
 
 String _$serverDetailControllerHash() =>
-    r'cbeda235e5c1871158267eae9f5a3949967c69e0';
+    r'6f2a48fcc850a0acb40ea44f84a6521dd7b115f5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 }
 
 abstract class _$ServerDetailController
-    extends BuildlessAutoDisposeNotifier<ServerDetailState> {
+    extends BuildlessAutoDisposeAsyncNotifier<ServerDetailState> {
   late final String serverId;
 
-  ServerDetailState build(String serverId);
+  FutureOr<ServerDetailState> build(String serverId);
 }
 
 /// See also [ServerDetailController].
@@ -42,7 +42,8 @@ abstract class _$ServerDetailController
 const serverDetailControllerProvider = ServerDetailControllerFamily();
 
 /// See also [ServerDetailController].
-class ServerDetailControllerFamily extends Family<ServerDetailState> {
+class ServerDetailControllerFamily
+    extends Family<AsyncValue<ServerDetailState>> {
   /// See also [ServerDetailController].
   const ServerDetailControllerFamily();
 
@@ -76,7 +77,7 @@ class ServerDetailControllerFamily extends Family<ServerDetailState> {
 /// See also [ServerDetailController].
 class ServerDetailControllerProvider
     extends
-        AutoDisposeNotifierProviderImpl<
+        AutoDisposeAsyncNotifierProviderImpl<
           ServerDetailController,
           ServerDetailState
         > {
@@ -108,7 +109,7 @@ class ServerDetailControllerProvider
   final String serverId;
 
   @override
-  ServerDetailState runNotifierBuild(
+  FutureOr<ServerDetailState> runNotifierBuild(
     covariant ServerDetailController notifier,
   ) {
     return notifier.build(serverId);
@@ -131,7 +132,10 @@ class ServerDetailControllerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<ServerDetailController, ServerDetailState>
+  AutoDisposeAsyncNotifierProviderElement<
+    ServerDetailController,
+    ServerDetailState
+  >
   createElement() {
     return _ServerDetailControllerProviderElement(this);
   }
@@ -154,14 +158,14 @@ class ServerDetailControllerProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin ServerDetailControllerRef
-    on AutoDisposeNotifierProviderRef<ServerDetailState> {
+    on AutoDisposeAsyncNotifierProviderRef<ServerDetailState> {
   /// The parameter `serverId` of this provider.
   String get serverId;
 }
 
 class _ServerDetailControllerProviderElement
     extends
-        AutoDisposeNotifierProviderElement<
+        AutoDisposeAsyncNotifierProviderElement<
           ServerDetailController,
           ServerDetailState
         >

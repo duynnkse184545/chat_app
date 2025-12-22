@@ -15,16 +15,16 @@ class ServerCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: NetworkImage(server.iconUrl!),
-          child: server.iconUrl != null
-              ? Image.network(server.iconUrl!)
-              : Text(
+          backgroundImage: server.iconUrl != null ? NetworkImage(server.iconUrl!) : null,
+          child: server.iconUrl == null
+              ? Text(
                   server.name[0].toUpperCase(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
+                )
+              : null,
         ),
         title: Text(
           server.name,

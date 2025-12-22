@@ -7,7 +7,7 @@ part of 'create_server_controller.dart';
 // **************************************************************************
 
 String _$createServerControllerHash() =>
-    r'7fb742187e1fc01eed290a223bf7dd697b84ff88';
+    r'f07d7107ecbf1346021a90f02dca7940d98d0b8c';
 
 /// See also [CreateServerController].
 @ProviderFor(CreateServerController)

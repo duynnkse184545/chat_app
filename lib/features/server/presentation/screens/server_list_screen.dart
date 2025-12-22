@@ -1,4 +1,5 @@
 import 'package:chat_app/core/constants/route_constants.dart';
+import 'package:chat_app/core/error/failures.dart';
 import 'package:chat_app/core/widgets/error_text.dart';
 import 'package:chat_app/core/widgets/loader.dart';
 import 'package:chat_app/features/server/presentation/controllers/server_list_controller.dart';
@@ -13,7 +14,7 @@ class ServerListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(serverListControllerProvider);
+    final stateAsync = ref.watch(serverListControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -25,49 +26,49 @@ class ServerListScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: state.isLoading
-          ? const Loader()
-          : state.errorMessage != null
-          ? ErrorText(message: state.errorMessage!)
-          : state.servers.isEmpty
-          ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.dns_outlined,
-                    size: 64,
-                    color: AppColors.textSecondary,
-                  ),
-                  SizedBox(height: 16),
-
-                  Text(
-                    'No Servers Yet',
-                    style: TextStyle(
-                      fontSize: 18,
+      body: stateAsync.when(
+        data: (state) => state.servers.isEmpty
+            ? const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.dns_outlined,
+                      size: 64,
                       color: AppColors.textSecondary,
                     ),
-                  ),
-                  SizedBox(height: 8),
+                    SizedBox(height: 16),
 
-                  Text(
-                    'Create Your First Server!',
-                    style: TextStyle(color: AppColors.textSecondary),
-                  ),
-                ],
+                    Text(
+                      'No Servers Yet',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+
+                    Text(
+                      'Create Your First Server!',
+                      style: TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              )
+            : RefreshIndicator(
+                child: ListView.builder(
+                  itemCount: state.servers.length,
+                  itemBuilder: (context, index) {
+                    final server = state.servers[index];
+                    return ServerCard(server: server);
+                  },
+                ),
+                onRefresh: () =>
+                    ref.read(serverListControllerProvider.notifier).refresh(),
               ),
-            )
-          : RefreshIndicator(
-              child: ListView.builder(
-                itemCount: state.servers.length,
-                itemBuilder: (context, index) {
-                  final server = state.servers[index];
-                  return ServerCard(server: server);
-                },
-              ),
-              onRefresh: () =>
-                  ref.read(serverListControllerProvider.notifier).loadServers(),
-            ),
+        error: (error, stack) => ErrorText(message: (error as Failure).message),
+        loading: () => const Loader(),
+      ),
     );
   }
 }

@@ -8,28 +8,24 @@ part 'server_detail_controller.g.dart';
 @riverpod
 class ServerDetailController extends _$ServerDetailController {
   @override
-  ServerDetailState build(String serverId) {
-    loadServer(serverId);
-    return const ServerDetailState();
-  }
-
-  Future<void> loadServer(String serverId) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-
+  Future<ServerDetailState> build(String serverId) async {
     final getServerUseCase = await ref.read(getServerUseCaseProvider.future);
     final result = await getServerUseCase(serverId);
 
-    result.fold(
-      (failure) => state = state.copyWith(
-        isLoading: false,
-        errorMessage: failure.message,
-      ),
-      (server) => state = state.copyWith(
-        isLoading: false,
-        server: server,
-        errorMessage: null,
-      ),
+    return result.fold(
+      (failure) => throw failure,
+      (server) => ServerDetailState(server: server),
     );
+  }
+
+  Future<void> refresh(String serverId) async {
+    // Still showing old state while loading
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => build(serverId));
+
+    // Clear all while loading
+    // ref.invalidateSelf();
+    // await Future;
   }
 
   Future<bool> updateServer({
@@ -38,9 +34,14 @@ class ServerDetailController extends _$ServerDetailController {
     String? description,
     String? iconUrl,
   }) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+    final currentState = state.value;
+    if (currentState == null) return false;
 
-    final updateServerUseCase = await ref.read(updateServerUseCaseProvider.future);
+    state = AsyncValue.data(currentState.copyWith(isDeleting: true));
+
+    final updateServerUseCase = await ref.read(
+      updateServerUseCaseProvider.future,
+    );
     final result = await updateServerUseCase(
       serverId: serverId,
       name: name,
@@ -49,37 +50,34 @@ class ServerDetailController extends _$ServerDetailController {
     );
 
     return result.fold(
-          (failure) {
-        state = state.copyWith(
-          isLoading: false,
-          errorMessage: failure.message,
-        );
-        return false;
+      (failure) {
+        state = AsyncValue.data(currentState.copyWith(isDeleting: false));
+        throw failure;
       },
-          (_) {
-        loadServer(serverId);
+      (_) {
+        refresh(serverId);
         return true;
       },
     );
   }
 
-  Future<bool> deleteServer(String serverId) async {
-    state = state.copyWith(isDeleting: true, errorMessage: null);
+  Future<String?> deleteServer(String serverId) async {
+    final currentState = state.value;
+    if (currentState == null) return 'State not loaded!';
 
-    final deleteServerUseCase = await ref.read(deleteServerUseCaseProvider.future);
+    state = AsyncValue.data(currentState.copyWith(isDeleting: true));
+
+    final deleteServerUseCase = await ref.read(
+      deleteServerUseCaseProvider.future,
+    );
     final result = await deleteServerUseCase(serverId);
 
-    return result.fold(
-          (failure) {
-        state = state.copyWith(
-          isDeleting: false,
-          errorMessage: failure.message,
-        );
-        return false;
-      },
-          (_) {
-        return true;
-      },
-    );
+    return result.fold((failure) {
+      state = AsyncValue.data(currentState.copyWith(isDeleting: false));
+      return failure.message;
+    }, (_) {
+      state = AsyncValue.data(currentState.copyWith(isDeleting: false));
+      return null;
+    });
   }
 }

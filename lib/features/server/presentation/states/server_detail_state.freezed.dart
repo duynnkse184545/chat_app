@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ServerDetailState {
 
- ServerEntity? get server; bool get isLoading; bool get isDeleting; String? get errorMessage;
+ ServerEntity? get server; bool get isLoading; bool get isDeleting;
 /// Create a copy of ServerDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ServerDetailStateCopyWith<ServerDetailState> get copyWith => _$ServerDetailStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting,errorMessage);
+int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting);
 
 @override
 String toString() {
-  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting, errorMessage: $errorMessage)';
+  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ServerDetailStateCopyWith<$Res>  {
   factory $ServerDetailStateCopyWith(ServerDetailState value, $Res Function(ServerDetailState) _then) = _$ServerDetailStateCopyWithImpl;
 @useResult
 $Res call({
- ServerEntity? server, bool isLoading, bool isDeleting, String? errorMessage
+ ServerEntity? server, bool isLoading, bool isDeleting
 });
 
 
@@ -62,13 +62,12 @@ class _$ServerDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of ServerDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,}) {
   return _then(_self.copyWith(
 server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
 as ServerEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isDeleting: null == isDeleting ? _self.isDeleting : isDeleting // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,
   ));
 }
 /// Create a copy of ServerDetailState
@@ -165,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ServerDetailState() when $default != null:
-return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+return $default(_that.server,_that.isLoading,_that.isDeleting);case _:
   return orElse();
 
 }
@@ -186,10 +185,10 @@ return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ServerEntity? server,  bool isLoading,  bool isDeleting)  $default,) {final _that = this;
 switch (_that) {
 case _ServerDetailState():
-return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+return $default(_that.server,_that.isLoading,_that.isDeleting);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +205,10 @@ return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ServerEntity? server,  bool isLoading,  bool isDeleting,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ServerEntity? server,  bool isLoading,  bool isDeleting)?  $default,) {final _that = this;
 switch (_that) {
 case _ServerDetailState() when $default != null:
-return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage);case _:
+return $default(_that.server,_that.isLoading,_that.isDeleting);case _:
   return null;
 
 }
@@ -221,13 +220,12 @@ return $default(_that.server,_that.isLoading,_that.isDeleting,_that.errorMessage
 
 
 class _ServerDetailState implements ServerDetailState {
-  const _ServerDetailState({this.server, this.isLoading = false, this.isDeleting = false, this.errorMessage});
+  const _ServerDetailState({this.server, this.isLoading = false, this.isDeleting = false});
   
 
 @override final  ServerEntity? server;
 @override@JsonKey() final  bool isLoading;
 @override@JsonKey() final  bool isDeleting;
-@override final  String? errorMessage;
 
 /// Create a copy of ServerDetailState
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +237,16 @@ _$ServerDetailStateCopyWith<_ServerDetailState> get copyWith => __$ServerDetailS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ServerDetailState&&(identical(other.server, server) || other.server == server)&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting,errorMessage);
+int get hashCode => Object.hash(runtimeType,server,isLoading,isDeleting);
 
 @override
 String toString() {
-  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting, errorMessage: $errorMessage)';
+  return 'ServerDetailState(server: $server, isLoading: $isLoading, isDeleting: $isDeleting)';
 }
 
 
@@ -259,7 +257,7 @@ abstract mixin class _$ServerDetailStateCopyWith<$Res> implements $ServerDetailS
   factory _$ServerDetailStateCopyWith(_ServerDetailState value, $Res Function(_ServerDetailState) _then) = __$ServerDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- ServerEntity? server, bool isLoading, bool isDeleting, String? errorMessage
+ ServerEntity? server, bool isLoading, bool isDeleting
 });
 
 
@@ -276,13 +274,12 @@ class __$ServerDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of ServerDetailState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? server = freezed,Object? isLoading = null,Object? isDeleting = null,}) {
   return _then(_ServerDetailState(
 server: freezed == server ? _self.server : server // ignore: cast_nullable_to_non_nullable
 as ServerEntity?,isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,isDeleting: null == isDeleting ? _self.isDeleting : isDeleting // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,
   ));
 }
 

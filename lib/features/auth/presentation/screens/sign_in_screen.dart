@@ -43,10 +43,16 @@ class SignInScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Icon(
-              Icons.chat_bubble,
-              size: 80,
-              color: AppColors.accentColor,
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(80),
+                child: Image.asset(
+                  'assets/app_logo.jpg',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(height: 16,),
 

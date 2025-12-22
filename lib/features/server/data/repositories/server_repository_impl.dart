@@ -57,7 +57,7 @@ class ServerRepositoryImpl implements ServerRepository {
         iconUrl: iconUrl,
       );
 
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => _localDatasource.cacheServer(serverModel),
         'Cache new server',
       );
@@ -87,7 +87,7 @@ class ServerRepositoryImpl implements ServerRepository {
 
       final serverModels = await _remoteDatasource.getUserServers();
 
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => _localDatasource.cacheServers(serverModels),
         'Cache user servers',
       );
@@ -124,7 +124,7 @@ class ServerRepositoryImpl implements ServerRepository {
 
       final serverModel = await _remoteDatasource.getServer(serverId);
 
-      ErrorHandler.handleSafely(
+      await ErrorHandler.handleSafely(
         () => _localDatasource.cacheServer(serverModel),
         'Cache server',
       );
@@ -165,7 +165,7 @@ class ServerRepositoryImpl implements ServerRepository {
     try {
       await _remoteDatasource.deleteServer(serverId);
 
-      ErrorHandler.handleSafely(() async {
+      await ErrorHandler.handleSafely(() async {
         final servers = await _localDatasource.getCachedServers();
         final updatedServers = servers
             .where((server) => server.serverId != serverId)
