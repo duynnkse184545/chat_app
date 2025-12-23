@@ -1,6 +1,5 @@
-import 'package:chat_app/features/server/domain/repository/server_repository.dart';
-
 import 'package:chat_app/core/utils/type_defs.dart';
+import 'package:chat_app/features/server/domain/repository/server_repository.dart';
 import 'package:chat_app/features/server/domain/entities/server_entity.dart';
 
 class GetServerUseCase {
@@ -8,7 +7,7 @@ class GetServerUseCase {
 
   GetServerUseCase(this._repository);
 
-  FutureEither<ServerEntity> call(String serverId) {
+  StreamEither<ServerEntity> call(String serverId) {
     return _repository.getServer(serverId);
   }
 }

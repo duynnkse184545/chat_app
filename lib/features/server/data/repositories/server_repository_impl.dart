@@ -62,6 +62,14 @@ class ServerRepositoryImpl implements ServerRepository {
         'Cache new server',
       );
 
+      await ErrorHandler.handleSafely(() async {
+        final currentServers = await _localDatasource.getCachedServers();
+        if (!currentServers.any((s) => s.serverId == serverModel.serverId)) {
+          final updatedServers = [...currentServers, serverModel];
+          await _localDatasource.cacheServers(updatedServers);
+        }
+      }, 'Update server list cache');
+
       return Right(serverModel.toEntity());
     } on FirebaseException catch (e) {
       return Left(_convertFirebaseException(e));
@@ -71,20 +79,20 @@ class ServerRepositoryImpl implements ServerRepository {
   }
 
   @override
-  FutureEither<List<ServerEntity>> getUserServers() async {
+  StreamEither<List<ServerEntity>> getUserServers() async* {
+    // 1. Emit Cache First
     try {
-      try {
-        final cachedServers = await _localDatasource.getCachedServers();
-        if (cachedServers.isNotEmpty) {
-          debugPrint('✅ Loaded ${cachedServers.length} servers from cache');
-
-          _refreshServersInBackground();
-          return Right(cachedServers.map((model) => model.toEntity()).toList());
-        }
-      } catch (e) {
-        debugPrint('⚠️ Cache read failed: $e');
+      final cachedServers = await _localDatasource.getCachedServers();
+      if (cachedServers.isNotEmpty) {
+        debugPrint('✅ Yielding Cached Servers: ${cachedServers.length}');
+        yield Right(cachedServers.map((model) => model.toEntity()).toList());
       }
+    } catch (e) {
+      debugPrint('⚠️ Cache read failed: $e');
+    }
 
+    // 2. Fetch Network, Cache, and Emit
+    try {
       final serverModels = await _remoteDatasource.getUserServers();
 
       await ErrorHandler.handleSafely(
@@ -92,36 +100,29 @@ class ServerRepositoryImpl implements ServerRepository {
         'Cache user servers',
       );
 
-      return Right(serverModels.map((model) => model.toEntity()).toList());
+      debugPrint('✅ Yielding Fresh Servers: ${serverModels.length}');
+      yield Right(serverModels.map((model) => model.toEntity()).toList());
     } on FirebaseException catch (e) {
-      return Left(_convertFirebaseException(e));
+      yield Left(_convertFirebaseException(e));
     } catch (e, stackTrace) {
-      return Left(ErrorHandler.convertException(e, stackTrace));
-    }
-  }
-
-  Future<void> _refreshServersInBackground() async {
-    try {
-      final freshServers = await _remoteDatasource.getUserServers();
-      await _localDatasource.cacheServers(freshServers);
-      debugPrint('✅ Background refresh: ${freshServers.length} servers');
-    } catch (e) {
-      debugPrint('⚠️ Background refresh failed: $e');
+      yield Left(ErrorHandler.convertException(e, stackTrace));
     }
   }
 
   @override
-  FutureEither<ServerEntity> getServer(String serverId) async {
+  StreamEither<ServerEntity> getServer(String serverId) async* {
+    // 1. Emit Cache First
     try {
-      try {
-        final cachedServer = await _localDatasource.getCachedServer(serverId);
-        if (cachedServer != null) {
-          return Right(cachedServer.toEntity());
-        }
-      } catch (e) {
-        debugPrint('⚠️ Cache read failed: $e');
+      final cachedServer = await _localDatasource.getCachedServer(serverId);
+      if (cachedServer != null) {
+        yield Right(cachedServer.toEntity());
       }
+    } catch (e) {
+      debugPrint('⚠️ Cache read failed: $e');
+    }
 
+    // 2. Fetch Network, Cache, and Emit
+    try {
       final serverModel = await _remoteDatasource.getServer(serverId);
 
       await ErrorHandler.handleSafely(
@@ -129,11 +130,11 @@ class ServerRepositoryImpl implements ServerRepository {
         'Cache server',
       );
 
-      return Right(serverModel.toEntity());
+      yield Right(serverModel.toEntity());
     } on FirebaseException catch (e) {
-      return Left(_convertFirebaseException(e));
+      yield Left(_convertFirebaseException(e));
     } catch (e, stackTrace) {
-      return Left(ErrorHandler.convertException(e, stackTrace));
+      yield Left(ErrorHandler.convertException(e, stackTrace));
     }
   }
 
@@ -151,6 +152,26 @@ class ServerRepositoryImpl implements ServerRepository {
         description: description,
         iconUrl: iconUrl,
       );
+
+      await ErrorHandler.handleSafely(() async {
+        final currentServers = await _localDatasource.getCachedServers();
+        final index = currentServers.indexWhere((s) => s.serverId == serverId);
+
+        if (index != -1) {
+          final oldServer = currentServers[index];
+          final updatedServer = oldServer.copyWith(
+            name: name ?? oldServer.name,
+            description: description ?? oldServer.description,
+            iconUrl: iconUrl ?? oldServer.iconUrl,
+          );
+          
+          final updatedList = List.of(currentServers);
+          updatedList[index] = updatedServer;
+          
+          await _localDatasource.cacheServers(updatedList);
+          await _localDatasource.cacheServer(updatedServer);
+        }
+      }, 'Update server cache');
 
       return const Right(null);
     } on FirebaseException catch (e) {

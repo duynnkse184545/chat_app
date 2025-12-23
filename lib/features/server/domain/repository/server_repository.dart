@@ -8,9 +8,9 @@ abstract class ServerRepository{
     String? iconUrl,
   });
 
-  FutureEither<List<ServerEntity>> getUserServers();
+  StreamEither<List<ServerEntity>> getUserServers();
 
-  FutureEither<ServerEntity> getServer(String serverId);
+  StreamEither<ServerEntity> getServer(String serverId);
 
   FutureVoid updateServer({
     required String serverId,

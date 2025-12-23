@@ -7,25 +7,18 @@ part 'server_list_controller.g.dart';
 @riverpod
 class ServerListController extends _$ServerListController {
   @override
-  Future<ServerListState> build() async {
+  Stream<ServerListState> build() async* {
     final getUserServersUseCase = await ref.read(
       getUserServersUseCaseProvider.future,
     );
-    final result = await getUserServersUseCase();
 
-    return result.fold(
-      (failure) => throw failure,
-      (servers) => ServerListState(servers: servers),
-    );
-  }
+    final stream = getUserServersUseCase();
 
-  Future<void> refresh() async {
-    // Still showing old state while loading
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => build());
-
-    // Clear all while loading
-    // ref.invalidateSelf();
-    // await Future;
+    await for (final result in stream) {
+      yield result.fold(
+        (failure) => throw failure,
+        (servers) => ServerListState(servers: servers),
+      );
+    }
   }
 }

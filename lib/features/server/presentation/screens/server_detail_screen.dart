@@ -20,6 +20,10 @@ class ServerDetailScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(stateAsync.value?.server?.name ?? 'Server'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Routes.goBack(context),
+        ),
         actions: [
           if (stateAsync.value?.server != null)
             PopupMenuButton<String>(
@@ -118,14 +122,11 @@ class ServerDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
 
                 ElevatedButton.icon(
-                  onPressed: () {
-                    // Will implement in Tutorial 06
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Channels coming in Tutorial 06!'),
-                      ),
-                    );
-                  },
+                  onPressed: () => Routes.goToChannelList(
+                    context,
+                    serverId: serverId,
+                    serverName: state.server!.name,
+                  ),
                   icon: const Icon(Icons.tag),
                   label: const Text('View Channels'),
                   style: ElevatedButton.styleFrom(

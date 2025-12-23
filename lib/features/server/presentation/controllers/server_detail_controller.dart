@@ -1,6 +1,6 @@
+import 'package:chat_app/features/server/presentation/controllers/server_list_controller.dart';
 import 'package:chat_app/features/server/presentation/controllers/server_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:chat_app/features/server/presentation/states/server_detail_state.dart';
 
 part 'server_detail_controller.g.dart';
@@ -8,24 +8,17 @@ part 'server_detail_controller.g.dart';
 @riverpod
 class ServerDetailController extends _$ServerDetailController {
   @override
-  Future<ServerDetailState> build(String serverId) async {
+  Stream<ServerDetailState> build(String serverId) async* {
     final getServerUseCase = await ref.read(getServerUseCaseProvider.future);
-    final result = await getServerUseCase(serverId);
 
-    return result.fold(
-      (failure) => throw failure,
-      (server) => ServerDetailState(server: server),
-    );
-  }
+    final stream = getServerUseCase(serverId);
 
-  Future<void> refresh(String serverId) async {
-    // Still showing old state while loading
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => build(serverId));
-
-    // Clear all while loading
-    // ref.invalidateSelf();
-    // await Future;
+    await for (final result in stream) {
+      yield result.fold(
+        (failure) => throw failure,
+        (server) => ServerDetailState(server: server),
+      );
+    }
   }
 
   Future<bool> updateServer({
@@ -55,7 +48,7 @@ class ServerDetailController extends _$ServerDetailController {
         throw failure;
       },
       (_) {
-        refresh(serverId);
+        ref.invalidateSelf();
         return true;
       },
     );
@@ -76,7 +69,8 @@ class ServerDetailController extends _$ServerDetailController {
       state = AsyncValue.data(currentState.copyWith(isDeleting: false));
       return failure.message;
     }, (_) {
-      state = AsyncValue.data(currentState.copyWith(isDeleting: false));
+      ref.invalidate(serverListControllerProvider);
+      ref.invalidateSelf();
       return null;
     });
   }

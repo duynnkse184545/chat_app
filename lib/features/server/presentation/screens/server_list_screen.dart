@@ -19,6 +19,10 @@ class ServerListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Servers'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Routes.goBack(context),
+        ),
         actions: [
           IconButton(
             onPressed: () => Routes.goToCreateServer(context),
@@ -63,8 +67,8 @@ class ServerListScreen extends ConsumerWidget {
                     return ServerCard(server: server);
                   },
                 ),
-                onRefresh: () =>
-                    ref.read(serverListControllerProvider.notifier).refresh(),
+                onRefresh: () async =>
+                    await ref.refresh(serverListControllerProvider.future),
               ),
         error: (error, stack) => ErrorText(message: (error as Failure).message),
         loading: () => const Loader(),
