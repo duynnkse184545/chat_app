@@ -1,4 +1,6 @@
 import 'package:chat_app/core/widgets/loader.dart';
+import 'package:chat_app/features/channel/presentation/screens/channel_list_screen.dart';
+import 'package:chat_app/features/channel/presentation/screens/create_channel_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -94,6 +96,62 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: Routes.createServer.path,
         name: Routes.createServer.name,
         builder: (context, state) => const CreateServerScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.channelList.path,
+        name: Routes.channelList.name,
+        builder: (context, state) {
+          final serverId = state.pathParameters['serverId']!;
+          final extra = state.extra as Map<String, dynamic>?;
+          final serverName = extra?['serverName'] ?? 'Server';
+
+          return ChannelListScreen(
+            serverId: serverId,
+            serverName: serverName,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: Routes.createChannel.path,
+        name: Routes.createChannel.name,
+        builder: (context, state) {
+          final serverId = state.pathParameters['serverId']!;
+          return CreateChannelScreen(serverId: serverId);
+        },
+      ),
+
+// Chat route (will be implemented in Tutorial 07)
+      GoRoute(
+        path: Routes.chat.path,
+        name: Routes.chat.name,
+        builder: (context, state) {
+          final serverId = state.pathParameters['serverId']!;
+          final channelId = state.pathParameters['channelId']!;
+          final extra = state.extra as Map<String, dynamic>?;
+          final channelName = extra?['channelName'] ?? 'Chat';
+
+          return Scaffold(
+            appBar: AppBar(title: Text(channelName)),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Chat Screen',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Server ID: $serverId'),
+                  Text('Channel ID: $channelId'),
+                  const SizedBox(height: 24),
+                  const Text('Coming in Tutorial 07!'),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

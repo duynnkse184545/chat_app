@@ -55,6 +55,21 @@ class Routes {
     path: '/servers/:serverId/channels/:channelId',
   );
 
+  static const RouteInfo channelList = RouteInfo(
+    name: 'channel-list',
+    path: '/servers/:serverId/channels',
+  );
+
+  static const RouteInfo createChannel = RouteInfo(
+    name: 'create-channel',
+    path: '/servers/:serverId/create-channel',
+  );
+
+  static const RouteInfo chat = RouteInfo(
+    name: 'chat',
+    path: '/servers/:serverId/channels/:channelId/chat',
+  );
+
   // Auth navigation
   static void goToLoading(BuildContext context) {
     context.goNamed(loading.name);
@@ -74,18 +89,18 @@ class Routes {
 
   // Server navigation (will be added in Tutorial 05)
   static void goToServers(BuildContext context) {
-    context.goNamed(servers.name);
+    context.pushNamed(servers.name);
   }
 
   static void goToServerDetails(BuildContext context, String serverId) {
-    context.goNamed(
+    context.pushNamed(
       serverDetails.name,
       pathParameters: {'serverId': serverId},
     );
   }
 
   static void goToCreateServer(BuildContext context) {
-    context.goNamed(createServer.name);
+    context.pushNamed(createServer.name);
   }
 
   static void goToChannel(
@@ -120,6 +135,41 @@ class Routes {
         'serverId': serverId,
         'channelId': channelId,
       },
+    );
+  }
+
+  static void goToChannelList(
+      BuildContext context, {
+        required String serverId,
+        required String serverName,
+      }) {
+    context.pushNamed(
+      channelList.name,
+      pathParameters: {'serverId': serverId},
+      extra: {'serverName': serverName},
+    );
+  }
+
+  static void goToCreateChannel(BuildContext context, String serverId) {
+    context.pushNamed(
+      createChannel.name,
+      pathParameters: {'serverId': serverId},
+    );
+  }
+
+  static void goToChat(
+      BuildContext context, {
+        required String serverId,
+        required String channelId,
+        required String channelName,
+      }) {
+    context.pushNamed(
+      chat.name,
+      pathParameters: {
+        'serverId': serverId,
+        'channelId': channelId,
+      },
+      extra: {'channelName': channelName},
     );
   }
 
