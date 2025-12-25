@@ -1,10 +1,10 @@
 import 'package:chat_app/core/widgets/loader.dart';
 import 'package:chat_app/features/channel/presentation/screens/channel_list_screen.dart';
 import 'package:chat_app/features/channel/presentation/screens/create_channel_screen.dart';
+import 'package:chat_app/features/chat/presentation/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:chat_app/features/auth/presentation/controllers/auth_providers.dart';
 import 'package:chat_app/features/auth/presentation/screens/home_screen.dart';
 import 'package:chat_app/features/auth/presentation/screens/sign_in_screen.dart';
@@ -122,7 +122,6 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
 
-// Chat route (will be implemented in Tutorial 07)
       GoRoute(
         path: Routes.chat.path,
         name: Routes.chat.name,
@@ -132,24 +131,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           final extra = state.extra as Map<String, dynamic>?;
           final channelName = extra?['channelName'] ?? 'Chat';
 
-          return Scaffold(
-            appBar: AppBar(title: Text(channelName)),
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Chat Screen',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  Text('Server ID: $serverId'),
-                  Text('Channel ID: $channelId'),
-                  const SizedBox(height: 24),
-                  const Text('Coming in Tutorial 07!'),
-                ],
-              ),
-            ),
+          return ChatScreen(
+            serverId: serverId,
+            channelId: channelId,
+            channelName: channelName,
           );
         },
       ),
