@@ -1,8 +1,6 @@
-import 'package:chat_app/features/chat/data/datasources/drift_db.dart';
+import 'package:chat_app/features/chat/data/datasources/message_dao.dart';
 import 'package:chat_app/features/chat/data/models/message_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final appDbProvider = Provider<AppDb>((ref) => AppDb());
 
 abstract class MessageLocalDatasource {
   Future<void> cacheMessages(List<MessageModel> messages);
@@ -11,22 +9,23 @@ abstract class MessageLocalDatasource {
 }
 
 class MessageLocalDatasourceImpl implements MessageLocalDatasource{
-  final AppDb _db;
+  final MessageDao _dao;
 
-  MessageLocalDatasourceImpl({required AppDb db}) : _db = db;
+  MessageLocalDatasourceImpl({required MessageDao dao}) : _dao = dao;
+
   
   @override
   Future<void> cacheMessage(MessageModel message) {
-    return _db.saveMessage(message);
+    return _dao.saveMessage(message);
   }
 
   @override
   Future<void> cacheMessages(List<MessageModel> messages) {
-    return _db.saveMessages(messages);
+    return _dao.saveMessages(messages);
   }
 
   @override
   Future<List<MessageModel>> getCachedMessages(String channelId) {
-    return _db.getMessages(channelId);
+    return _dao.getMessages(channelId);
   }
 }

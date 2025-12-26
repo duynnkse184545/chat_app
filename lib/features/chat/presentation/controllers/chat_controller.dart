@@ -52,7 +52,6 @@ class ChatController extends _$ChatController {
         return failure.message;
       },
       (_) {
-        state = AsyncValue.data(currentState.copyWith(isSending: false));
         return null;
       },
     );

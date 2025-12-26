@@ -1,3 +1,4 @@
+import 'package:chat_app/core/providers/database_provider.dart';
 import 'package:chat_app/core/providers/firebase_providers.dart';
 import 'package:chat_app/features/chat/data/datasources/message_local_datasource.dart';
 import 'package:chat_app/features/chat/data/datasources/message_remote_datasource.dart';
@@ -20,7 +21,7 @@ MessageRemoteDatasource messageRemoteDatasource(Ref ref) {
 
 @riverpod
 MessageLocalDatasource messageLocalDatasource(Ref ref) {
-  return MessageLocalDatasourceImpl(db: ref.watch(appDbProvider));
+  return MessageLocalDatasourceImpl(dao: ref.watch(messageDaoProvider));
 }
 
 @riverpod
