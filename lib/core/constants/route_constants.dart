@@ -70,6 +70,27 @@ class Routes {
     path: '/servers/:serverId/channels/:channelId/chat',
   );
 
+  // Friends & DM routes
+  static const RouteInfo friends = RouteInfo(
+    name: 'friends',
+    path: '/friends',
+  );
+
+  static const RouteInfo friendRequests = RouteInfo(
+    name: 'friend-requests',
+    path: '/friend-requests',
+  );
+
+  static const RouteInfo addFriend = RouteInfo(
+    name: 'add-friend',
+    path: '/add-friend',
+  );
+
+  static const RouteInfo directMessage = RouteInfo(
+    name: 'direct-message',
+    path: '/dm/:friendId',
+  );
+
   // Auth navigation
   static void goToLoading(BuildContext context) {
     context.goNamed(loading.name);
@@ -181,5 +202,30 @@ class Routes {
   /// Check if can go back
   static bool canGoBack(BuildContext context) {
     return context.canPop();
+  }
+
+  // Friends & DM navigation
+  static void goToFriends(BuildContext context) {
+    context.pushNamed(friends.name);
+  }
+
+  static void goToFriendRequests(BuildContext context) {
+    context.pushNamed(friendRequests.name);
+  }
+
+  static void goToAddFriend(BuildContext context) {
+    context.pushNamed(addFriend.name);
+  }
+
+  static void goToDirectMessage(
+    BuildContext context, {
+    required String friendId,
+    required String friendName,
+  }) {
+    context.pushNamed(
+      directMessage.name,
+      pathParameters: {'friendId': friendId},
+      extra: {'friendName': friendName},
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:chat_app/core/utils/json_converters.dart';
 import 'package:chat_app/features/auth/domain/entities/user_entity.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_model.freezed.dart';
@@ -17,6 +18,7 @@ abstract class UserModel with _$UserModel {
     @TimestampConverter() required DateTime createdAt,
     String? bio,
     @Default([]) List<String> serverIds,
+    @Default([]) List<String> friendIds,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -31,6 +33,7 @@ abstract class UserModel with _$UserModel {
       createdAt: createdAt,
       bio: bio,
       serverIds: serverIds,
+      friendIds: friendIds,
     );
   }
 
@@ -43,6 +46,15 @@ abstract class UserModel with _$UserModel {
       createdAt: entity.createdAt,
       bio: entity.bio,
       serverIds: entity.serverIds,
+      friendIds: entity.friendIds,
     );
+  }
+
+  factory UserModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>?;
+    if (data == null) {
+      throw Exception('User document data is null');
+    }
+    return UserModel.fromJson(data);
   }
 }

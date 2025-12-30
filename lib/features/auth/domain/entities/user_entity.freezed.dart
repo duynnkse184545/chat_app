@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserEntity {
 
- String get uid; String get email; String get username; String? get avatarUrl; DateTime get createdAt; String? get bio; List<String> get serverIds;
+ String get uid; String get email; String get username; String? get avatarUrl; DateTime get createdAt; String? get bio; List<String> get serverIds; List<String> get friendIds;
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UserEntityCopyWith<UserEntity> get copyWith => _$UserEntityCopyWithImpl<UserEnt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserEntity&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.bio, bio) || other.bio == bio)&&const DeepCollectionEquality().equals(other.serverIds, serverIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserEntity&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.bio, bio) || other.bio == bio)&&const DeepCollectionEquality().equals(other.serverIds, serverIds)&&const DeepCollectionEquality().equals(other.friendIds, friendIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,uid,email,username,avatarUrl,createdAt,bio,const DeepCollectionEquality().hash(serverIds));
+int get hashCode => Object.hash(runtimeType,uid,email,username,avatarUrl,createdAt,bio,const DeepCollectionEquality().hash(serverIds),const DeepCollectionEquality().hash(friendIds));
 
 @override
 String toString() {
-  return 'UserEntity(uid: $uid, email: $email, username: $username, avatarUrl: $avatarUrl, createdAt: $createdAt, bio: $bio, serverIds: $serverIds)';
+  return 'UserEntity(uid: $uid, email: $email, username: $username, avatarUrl: $avatarUrl, createdAt: $createdAt, bio: $bio, serverIds: $serverIds, friendIds: $friendIds)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UserEntityCopyWith<$Res>  {
   factory $UserEntityCopyWith(UserEntity value, $Res Function(UserEntity) _then) = _$UserEntityCopyWithImpl;
 @useResult
 $Res call({
- String uid, String email, String username, String? avatarUrl, DateTime createdAt, String? bio, List<String> serverIds
+ String uid, String email, String username, String? avatarUrl, DateTime createdAt, String? bio, List<String> serverIds, List<String> friendIds
 });
 
 
@@ -62,7 +62,7 @@ class _$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? email = null,Object? username = null,Object? avatarUrl = freezed,Object? createdAt = null,Object? bio = freezed,Object? serverIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? uid = null,Object? email = null,Object? username = null,Object? avatarUrl = freezed,Object? createdAt = null,Object? bio = freezed,Object? serverIds = null,Object? friendIds = null,}) {
   return _then(_self.copyWith(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -71,6 +71,7 @@ as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignor
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String?,serverIds: null == serverIds ? _self.serverIds : serverIds // ignore: cast_nullable_to_non_nullable
+as List<String>,friendIds: null == friendIds ? _self.friendIds : friendIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds,  List<String> friendIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
-return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds);case _:
+return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds,_that.friendIds);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.creat
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds,  List<String> friendIds)  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity():
-return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds);case _:
+return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds,_that.friendIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.creat
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String uid,  String email,  String username,  String? avatarUrl,  DateTime createdAt,  String? bio,  List<String> serverIds,  List<String> friendIds)?  $default,) {final _that = this;
 switch (_that) {
 case _UserEntity() when $default != null:
-return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds);case _:
+return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.createdAt,_that.bio,_that.serverIds,_that.friendIds);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.uid,_that.email,_that.username,_that.avatarUrl,_that.creat
 
 
 class _UserEntity implements UserEntity {
-  const _UserEntity({required this.uid, required this.email, required this.username, this.avatarUrl, required this.createdAt, this.bio, final  List<String> serverIds = const []}): _serverIds = serverIds;
+  const _UserEntity({required this.uid, required this.email, required this.username, this.avatarUrl, required this.createdAt, this.bio, final  List<String> serverIds = const [], final  List<String> friendIds = const []}): _serverIds = serverIds,_friendIds = friendIds;
   
 
 @override final  String uid;
@@ -228,6 +229,13 @@ class _UserEntity implements UserEntity {
   return EqualUnmodifiableListView(_serverIds);
 }
 
+ final  List<String> _friendIds;
+@override@JsonKey() List<String> get friendIds {
+  if (_friendIds is EqualUnmodifiableListView) return _friendIds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_friendIds);
+}
+
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +247,16 @@ _$UserEntityCopyWith<_UserEntity> get copyWith => __$UserEntityCopyWithImpl<_Use
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserEntity&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.bio, bio) || other.bio == bio)&&const DeepCollectionEquality().equals(other._serverIds, _serverIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserEntity&&(identical(other.uid, uid) || other.uid == uid)&&(identical(other.email, email) || other.email == email)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.bio, bio) || other.bio == bio)&&const DeepCollectionEquality().equals(other._serverIds, _serverIds)&&const DeepCollectionEquality().equals(other._friendIds, _friendIds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,uid,email,username,avatarUrl,createdAt,bio,const DeepCollectionEquality().hash(_serverIds));
+int get hashCode => Object.hash(runtimeType,uid,email,username,avatarUrl,createdAt,bio,const DeepCollectionEquality().hash(_serverIds),const DeepCollectionEquality().hash(_friendIds));
 
 @override
 String toString() {
-  return 'UserEntity(uid: $uid, email: $email, username: $username, avatarUrl: $avatarUrl, createdAt: $createdAt, bio: $bio, serverIds: $serverIds)';
+  return 'UserEntity(uid: $uid, email: $email, username: $username, avatarUrl: $avatarUrl, createdAt: $createdAt, bio: $bio, serverIds: $serverIds, friendIds: $friendIds)';
 }
 
 
@@ -259,7 +267,7 @@ abstract mixin class _$UserEntityCopyWith<$Res> implements $UserEntityCopyWith<$
   factory _$UserEntityCopyWith(_UserEntity value, $Res Function(_UserEntity) _then) = __$UserEntityCopyWithImpl;
 @override @useResult
 $Res call({
- String uid, String email, String username, String? avatarUrl, DateTime createdAt, String? bio, List<String> serverIds
+ String uid, String email, String username, String? avatarUrl, DateTime createdAt, String? bio, List<String> serverIds, List<String> friendIds
 });
 
 
@@ -276,7 +284,7 @@ class __$UserEntityCopyWithImpl<$Res>
 
 /// Create a copy of UserEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? email = null,Object? username = null,Object? avatarUrl = freezed,Object? createdAt = null,Object? bio = freezed,Object? serverIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? uid = null,Object? email = null,Object? username = null,Object? avatarUrl = freezed,Object? createdAt = null,Object? bio = freezed,Object? serverIds = null,Object? friendIds = null,}) {
   return _then(_UserEntity(
 uid: null == uid ? _self.uid : uid // ignore: cast_nullable_to_non_nullable
 as String,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
@@ -285,6 +293,7 @@ as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignor
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
 as String?,serverIds: null == serverIds ? _self._serverIds : serverIds // ignore: cast_nullable_to_non_nullable
+as List<String>,friendIds: null == friendIds ? _self._friendIds : friendIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }

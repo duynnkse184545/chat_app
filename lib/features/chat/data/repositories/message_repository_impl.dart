@@ -24,15 +24,17 @@ class MessageRepositoryImpl implements MessageRepository {
 
     return switch (e.code) {
       'permission-denied' => const Failure.permissionFailure(
-        'You do not have permission to send messages in this channel.',
+        'You do not have permission to send messages.',
       ),
-      'not-found' => const Failure.notFoundFailure('Channel not found.'),
+      'not-found' => const Failure.notFoundFailure('Conversation or channel not found.'),
       'unavailable' => const Failure.serverFailure(
         'Chat service temporarily unavailable. Please try again.',
       ),
       _ => Failure.serverFailure(e.message ?? 'Failed to send message.'),
     };
   }
+
+  // --- CHANNEL MESSAGES ---
 
   @override
   FutureEither<MessageEntity> sendMessage({
@@ -47,7 +49,6 @@ class MessageRepositoryImpl implements MessageRepository {
         content: content,
       );
 
-      // Cache the sent message (fire-and-forget)
       await ErrorHandler.handleSafely(
         () => _localDatasource.cacheMessage(model),
         'Cache sent message',
@@ -66,24 +67,92 @@ class MessageRepositoryImpl implements MessageRepository {
     required String serverId,
     required String channelId,
   }) async* {
+    // 1. Yield Cached Channel Messages
     try {
-      final cached = await _localDatasource.getCachedMessages(channelId);
-
+      final cached = await _localDatasource.getCachedChannelMessages(channelId);
       if (cached.isNotEmpty) {
         yield Right(cached.map((e) => e.toEntity()).toList());
       }
     } catch (e) {
-      debugPrint('🔴 Error getting cached messages: $e');
+      debugPrint('🔴 Error getting cached channel messages: $e');
     }
 
-    try{
+    // 2. Stream Remote Channel Messages
+    try {
       final stream = _remoteDatasource.streamMessages(
         serverId: serverId,
         channelId: channelId,
       );
 
-      await for(final messages in stream){
-        _localDatasource.cacheMessages(messages);
+      await for (final messages in stream) {
+        // Cache new messages
+        await ErrorHandler.handleSafely(
+          () => _localDatasource.cacheMessages(messages),
+          'Cache stream messages',
+        );
+        yield Right(messages.map((e) => e.toEntity()).toList());
+      }
+    } on FirebaseException catch (e) {
+      yield Left(_convertFirebaseException(e));
+    } catch (e, stackTrace) {
+      yield Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  // --- DIRECT MESSAGES (NEW) ---
+
+  @override
+  FutureEither<MessageEntity> sendDirectMessage({
+    required String conversationId,
+    required String content,
+  }) async {
+    try {
+      // 1. Send to Remote (Firestore)
+      final model = await _remoteDatasource.sendDirectMessage(
+        conversationId: conversationId,
+        content: content,
+      );
+
+      // 2. Cache Locally
+      await ErrorHandler.handleSafely(
+        () => _localDatasource.cacheMessage(model),
+        'Cache sent DM',
+      );
+
+      return Right(model.toEntity());
+    } on FirebaseException catch (e) {
+      return Left(_convertFirebaseException(e));
+    } catch (e, stackTrace) {
+      return Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  @override
+  StreamEither<List<MessageEntity>> streamDirectMessages({
+    required String conversationId,
+  }) async* {
+    // 1. Yield Cached DMs
+    try {
+      final cached = await _localDatasource.getCachedDirectMessages(conversationId);
+      if (cached.isNotEmpty) {
+        yield Right(cached.map((e) => e.toEntity()).toList());
+      }
+    } catch (e) {
+      debugPrint('🔴 Error getting cached DMs: $e');
+    }
+
+    // 2. Stream Remote DMs
+    try {
+      final stream = _remoteDatasource.streamDirectMessages(
+        conversationId: conversationId,
+      );
+
+      await for (final messages in stream) {
+        // Cache new messages
+        await ErrorHandler.handleSafely(
+          () => _localDatasource.cacheMessages(messages),
+          'Cache stream DMs',
+        );
         yield Right(messages.map((e) => e.toEntity()).toList());
       }
     } on FirebaseException catch (e) {

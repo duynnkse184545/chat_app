@@ -17,6 +17,7 @@ abstract class MessageModel with _$MessageModel {
     required String senderName,
     required String channelId,
     @TimestampConverter() required DateTime createdAt,
+    @Default(false) bool isDirectMessage,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
@@ -38,6 +39,7 @@ abstract class MessageModel with _$MessageModel {
       senderName: senderName,
       channelId: channelId,
       createdAt: createdAt,
+      isDirectMessage: isDirectMessage,
     );
   }
 
@@ -48,6 +50,7 @@ abstract class MessageModel with _$MessageModel {
       'senderName': senderName,
       'channelId': channelId,
       'createdAt': Timestamp.fromDate(createdAt),
+      'isDirectMessage': isDirectMessage,
     };
   }
 }

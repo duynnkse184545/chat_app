@@ -16,6 +16,9 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
   serverIds:
       (json['serverIds'] as List<dynamic>?)?.map((e) => e as String).toList() ??
       const [],
+  friendIds:
+      (json['friendIds'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
@@ -27,4 +30,5 @@ Map<String, dynamic> _$UserModelToJson(_UserModel instance) =>
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'bio': instance.bio,
       'serverIds': instance.serverIds,
+      'friendIds': instance.friendIds,
     };

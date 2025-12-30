@@ -6,6 +6,9 @@ class TimestampConverter implements JsonConverter<DateTime, dynamic> {
 
   @override
   DateTime fromJson(dynamic timestamp) {
+    if (timestamp == null) {
+      return DateTime.now(); // Handle Firestore serverTimestamp latency
+    }
     if (timestamp is Timestamp) {
       return timestamp.toDate();
     }
@@ -15,9 +18,11 @@ class TimestampConverter implements JsonConverter<DateTime, dynamic> {
     if (timestamp is int) {
       return DateTime.fromMillisecondsSinceEpoch(timestamp);
     }
-    return DateTime.now();
+    throw ArgumentError(
+      'Invalid timestamp format: $timestamp (${timestamp.runtimeType})',
+    );
   }
 
   @override
-  dynamic toJson(DateTime dateTime) => dateTime.toIso8601String();
+  dynamic toJson(DateTime dateTime) => Timestamp.fromDate(dateTime);
 }

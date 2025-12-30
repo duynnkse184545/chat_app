@@ -12,5 +12,6 @@ abstract class UserEntity with _$UserEntity{
     required DateTime createdAt,
     String? bio,
     @Default([]) List<String> serverIds,
+    @Default([]) List<String> friendIds,
   }) = _UserEntity;
 }

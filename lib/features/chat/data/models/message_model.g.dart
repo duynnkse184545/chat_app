@@ -14,6 +14,7 @@ _MessageModel _$MessageModelFromJson(Map<String, dynamic> json) =>
       senderName: json['senderName'] as String,
       channelId: json['channelId'] as String,
       createdAt: const TimestampConverter().fromJson(json['createdAt']),
+      isDirectMessage: json['isDirectMessage'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$MessageModelToJson(_MessageModel instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$MessageModelToJson(_MessageModel instance) =>
       'senderName': instance.senderName,
       'channelId': instance.channelId,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'isDirectMessage': instance.isDirectMessage,
     };

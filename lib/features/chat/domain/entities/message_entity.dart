@@ -11,5 +11,6 @@ abstract class MessageEntity with _$MessageEntity {
     required String senderName,
     required String channelId,
     required DateTime createdAt,
+    @Default(false) bool isDirectMessage,
   }) = _MessageEntity;
 }

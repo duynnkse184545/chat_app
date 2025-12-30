@@ -1,19 +1,22 @@
+import 'package:chat_app/core/constants/route_constants.dart';
 import 'package:chat_app/core/widgets/loader.dart';
-import 'package:chat_app/features/channel/presentation/screens/channel_list_screen.dart';
-import 'package:chat_app/features/channel/presentation/screens/create_channel_screen.dart';
-import 'package:chat_app/features/chat/presentation/screens/chat_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:chat_app/features/auth/presentation/controllers/auth_providers.dart';
 import 'package:chat_app/features/auth/presentation/screens/home_screen.dart';
 import 'package:chat_app/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:chat_app/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:chat_app/features/channel/presentation/screens/channel_list_screen.dart';
+import 'package:chat_app/features/channel/presentation/screens/create_channel_screen.dart';
+import 'package:chat_app/features/chat/presentation/models/chat_params.dart'; // Import ChatParams
+import 'package:chat_app/features/chat/presentation/screens/chat_screen.dart';
+import 'package:chat_app/features/friends/presentation/screens/add_friend_screen.dart';
+import 'package:chat_app/features/friends/presentation/screens/friend_requests_screen.dart';
+import 'package:chat_app/features/friends/presentation/screens/friends_list_screen.dart';
 import 'package:chat_app/features/server/presentation/screens/create_server_screen.dart';
 import 'package:chat_app/features/server/presentation/screens/server_detail_screen.dart';
 import 'package:chat_app/features/server/presentation/screens/server_list_screen.dart';
-
-import 'package:chat_app/core/constants/route_constants.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authStateChangesProvider);
@@ -132,9 +135,47 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           final channelName = extra?['channelName'] ?? 'Chat';
 
           return ChatScreen(
-            serverId: serverId,
-            channelId: channelId,
-            channelName: channelName,
+            params: ChatParams.channel(
+              serverId: serverId,
+              channelId: channelId,
+              channelName: channelName,
+            ),
+          );
+        },
+      ),
+
+      GoRoute(
+        path: Routes.friends.path,
+        name: Routes.friends.name,
+        builder: (context, state) => const FriendsListScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.friendRequests.path,
+        name: Routes.friendRequests.name,
+        builder: (context, state) => const FriendRequestsScreen(),
+      ),
+
+      GoRoute(
+        path: Routes.addFriend.path,
+        name: Routes.addFriend.name,
+        builder: (context, state) => const AddFriendScreen(),
+      ),
+
+      // Friends & DM routes
+      GoRoute(
+        path: Routes.directMessage.path,
+        name: Routes.directMessage.name,
+        builder: (context, state) {
+          final friendId = state.pathParameters['friendId']!;
+          final extra = state.extra as Map<String, dynamic>?;
+          final friendName = extra?['friendName'] ?? 'Friend';
+
+          return ChatScreen(
+            params: ChatParams.directMessage(
+              friendId: friendId,
+              friendName: friendName,
+            ),
           );
         },
       ),

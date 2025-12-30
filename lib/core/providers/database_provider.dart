@@ -1,5 +1,7 @@
 import 'package:chat_app/core/database/drift_db.dart';
-import 'package:chat_app/features/chat/data/datasources/message_dao.dart';
+import 'package:chat_app/core/database/dao/message_dao.dart';
+import 'package:chat_app/features/friends/data/datasources/daos/conversation_dao.dart';
+import 'package:chat_app/features/friends/data/datasources/daos/friend_dao.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -16,4 +18,16 @@ AppDb appDb(Ref ref){
 MessageDao messageDao(Ref ref) {
   final db = ref.watch(appDbProvider);
   return db.messageDao;
+}
+
+@riverpod
+FriendDao friendDao(Ref ref) {
+  final db = ref.watch(appDbProvider);
+  return db.friendDao;
+}
+
+@riverpod
+ConversationDao conversationDao(Ref ref) {
+  final db = ref.watch(appDbProvider);
+  return db.conversationDao;
 }
