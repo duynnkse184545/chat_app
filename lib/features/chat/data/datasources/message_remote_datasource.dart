@@ -5,11 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class MessageRemoteDatasource {
+  String generateMessageId({
+    required String serverId,
+    required String channelId,
+  });
+
   // Channel Messages
   Future<MessageModel> sendMessage({
     required String serverId,
     required String channelId,
     required String content,
+    required String messageId,
   });
 
   Stream<List<MessageModel>> streamMessages({
@@ -17,10 +23,13 @@ abstract class MessageRemoteDatasource {
     required String channelId,
   });
 
+  String generateDirectMessageId({required String conversationId});
+
   // Direct Messages
   Future<MessageModel> sendDirectMessage({
     required String conversationId,
     required String content,
+    required String messageId,
   });
 
   Stream<List<MessageModel>> streamDirectMessages({
@@ -70,7 +79,7 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     if (user == null) throw ServerException('User not authenticated');
     // Try to get updated name from Firestore user profile if possible, fallback to auth
     final doc = await _firestore.collection('users').doc(user.uid).get();
-    if(doc.exists){
+    if (doc.exists) {
       return doc.data()?['username'] ?? user.email ?? user.uid;
     }
     return user.email ?? user.uid;
@@ -79,10 +88,23 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   // --- IMPLEMENTATION ---
 
   @override
+  String generateMessageId({
+    required String serverId,
+    required String channelId,
+  }) {
+    // Get the ID Firestore would auto-generate
+    return _channelMessagesCollection(
+      serverId: serverId,
+      channelId: channelId,
+    ).doc().id;
+  }
+
+  @override
   Future<MessageModel> sendMessage({
     required String serverId,
     required String channelId,
     required String content,
+    required String messageId,
   }) async {
     try {
       final senderName = await _currentUserName;
@@ -95,11 +117,12 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
         'isDirectMessage': false, // Explicitly false
       };
 
-      final docRef = await _channelMessagesCollection(
+      final docRef = _channelMessagesCollection(
         serverId: serverId,
         channelId: channelId,
-      ).add(messageData);
-      
+      ).doc(messageId);
+      await docRef.set(messageData);
+
       final doc = await docRef.get();
       return MessageModel.fromFirestore(doc);
     } catch (e) {
@@ -113,7 +136,10 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
     required String channelId,
   }) {
     try {
-      return _channelMessagesCollection(serverId: serverId, channelId: channelId)
+      return _channelMessagesCollection(
+            serverId: serverId,
+            channelId: channelId,
+          )
           .orderBy('createdAt', descending: false)
           .snapshots()
           .map(
@@ -127,14 +153,20 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
   }
 
   @override
+  String generateDirectMessageId({required String conversationId}) {
+    return _dmMessagesCollection(conversationId).doc().id;
+  }
+
+  @override
   Future<MessageModel> sendDirectMessage({
     required String conversationId,
     required String content,
+    required String messageId,
   }) async {
     try {
       debugPrint('🔵 Sending DM to: $conversationId');
       final senderName = await _currentUserName;
-      
+
       final messageData = {
         'content': content,
         'senderId': _currentUserId,
@@ -145,7 +177,10 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
       };
 
       // 1. Add Message
-      final docRef = await _dmMessagesCollection(conversationId).add(messageData);
+      final docRef = await _dmMessagesCollection(
+        conversationId,
+      ).doc(messageId);
+      await docRef.set(messageData);
 
       // 2. Update Conversation Last Message (Important for list view)
       await _firestore.collection('conversations').doc(conversationId).update({
@@ -156,13 +191,15 @@ class MessageRemoteDatasourceImpl implements MessageRemoteDatasource {
       final doc = await docRef.get();
       return MessageModel.fromFirestore(doc);
     } catch (e) {
-       throw ServerException('Failed to send DM: $e');
+      throw ServerException('Failed to send DM: $e');
     }
   }
 
   @override
-  Stream<List<MessageModel>> streamDirectMessages({required String conversationId}) {
-     try {
+  Stream<List<MessageModel>> streamDirectMessages({
+    required String conversationId,
+  }) {
+    try {
       return _dmMessagesCollection(conversationId)
           .orderBy('createdAt', descending: false)
           .snapshots()

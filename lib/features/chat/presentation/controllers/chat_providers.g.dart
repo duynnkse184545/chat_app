@@ -27,7 +27,7 @@ final messageRemoteDatasourceProvider =
 typedef MessageRemoteDatasourceRef =
     AutoDisposeProviderRef<MessageRemoteDatasource>;
 String _$messageLocalDatasourceHash() =>
-    r'f2e1a1480afd40e83453ee7a3ea6ae2c3d669f30';
+    r'0f597a64a3e3a435dd1296d43f67b0c56d72233d';
 
 /// See also [messageLocalDatasource].
 @ProviderFor(messageLocalDatasource)
@@ -103,5 +103,105 @@ final streamMessagesUseCaseProvider =
 // ignore: unused_element
 typedef StreamMessagesUseCaseRef =
     AutoDisposeProviderRef<StreamMessagesUseCase>;
+String _$sendDirectMessageUseCaseHash() =>
+    r'a12b837214899c17a70e59a992c38c400efbfc41';
+
+/// See also [sendDirectMessageUseCase].
+@ProviderFor(sendDirectMessageUseCase)
+final sendDirectMessageUseCaseProvider =
+    AutoDisposeProvider<SendDirectMessageUseCase>.internal(
+      sendDirectMessageUseCase,
+      name: r'sendDirectMessageUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$sendDirectMessageUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SendDirectMessageUseCaseRef =
+    AutoDisposeProviderRef<SendDirectMessageUseCase>;
+String _$streamDirectMessageUseCaseHash() =>
+    r'16f2104245022b9c21c7e7d40fe08f131c588306';
+
+/// See also [streamDirectMessageUseCase].
+@ProviderFor(streamDirectMessageUseCase)
+final streamDirectMessageUseCaseProvider =
+    AutoDisposeProvider<StreamDirectMessageUseCase>.internal(
+      streamDirectMessageUseCase,
+      name: r'streamDirectMessageUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$streamDirectMessageUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef StreamDirectMessageUseCaseRef =
+    AutoDisposeProviderRef<StreamDirectMessageUseCase>;
+String _$watchLocalMessagesUseCaseHash() =>
+    r'539be47c24c9a9023f9d14fd80916d78075dd319';
+
+/// See also [watchLocalMessagesUseCase].
+@ProviderFor(watchLocalMessagesUseCase)
+final watchLocalMessagesUseCaseProvider =
+    AutoDisposeProvider<WatchLocalMessagesUseCase>.internal(
+      watchLocalMessagesUseCase,
+      name: r'watchLocalMessagesUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$watchLocalMessagesUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef WatchLocalMessagesUseCaseRef =
+    AutoDisposeProviderRef<WatchLocalMessagesUseCase>;
+String _$saveOptimisticMessageUseCaseHash() =>
+    r'7fa67372d172cf44a622799d7d787ebdcf13fa39';
+
+/// See also [saveOptimisticMessageUseCase].
+@ProviderFor(saveOptimisticMessageUseCase)
+final saveOptimisticMessageUseCaseProvider =
+    AutoDisposeProvider<SaveOptimisticMessageUseCase>.internal(
+      saveOptimisticMessageUseCase,
+      name: r'saveOptimisticMessageUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$saveOptimisticMessageUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef SaveOptimisticMessageUseCaseRef =
+    AutoDisposeProviderRef<SaveOptimisticMessageUseCase>;
+String _$updateMessageStatusUseCaseHash() =>
+    r'1290bf05480907715cd48088651d0a0415bb2883';
+
+/// See also [updateMessageStatusUseCase].
+@ProviderFor(updateMessageStatusUseCase)
+final updateMessageStatusUseCaseProvider =
+    AutoDisposeProvider<UpdateMessageStatusUseCase>.internal(
+      updateMessageStatusUseCase,
+      name: r'updateMessageStatusUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$updateMessageStatusUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef UpdateMessageStatusUseCaseRef =
+    AutoDisposeProviderRef<UpdateMessageStatusUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

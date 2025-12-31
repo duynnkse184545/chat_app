@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ChatState {
 
- List<MessageEntity> get messages; bool get isSending; String? get errorMessage;
+ List<MessageEntity> get messages; bool get isSending; ChatType get chatType; String? get errorMessage; String? get conversationId; String? get displayName;
 /// Create a copy of ChatState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ChatStateCopyWith<ChatState> get copyWith => _$ChatStateCopyWithImpl<ChatState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatState&&const DeepCollectionEquality().equals(other.messages, messages)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.chatType, chatType) || other.chatType == chatType)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&(identical(other.displayName, displayName) || other.displayName == displayName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),isSending,errorMessage);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(messages),isSending,chatType,errorMessage,conversationId,displayName);
 
 @override
 String toString() {
-  return 'ChatState(messages: $messages, isSending: $isSending, errorMessage: $errorMessage)';
+  return 'ChatState(messages: $messages, isSending: $isSending, chatType: $chatType, errorMessage: $errorMessage, conversationId: $conversationId, displayName: $displayName)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ChatStateCopyWith<$Res>  {
   factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) _then) = _$ChatStateCopyWithImpl;
 @useResult
 $Res call({
- List<MessageEntity> messages, bool isSending, String? errorMessage
+ List<MessageEntity> messages, bool isSending, ChatType chatType, String? errorMessage, String? conversationId, String? displayName
 });
 
 
@@ -62,11 +62,14 @@ class _$ChatStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? messages = null,Object? isSending = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? messages = null,Object? isSending = null,Object? chatType = null,Object? errorMessage = freezed,Object? conversationId = freezed,Object? displayName = freezed,}) {
   return _then(_self.copyWith(
 messages: null == messages ? _self.messages : messages // ignore: cast_nullable_to_non_nullable
 as List<MessageEntity>,isSending: null == isSending ? _self.isSending : isSending // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,chatType: null == chatType ? _self.chatType : chatType // ignore: cast_nullable_to_non_nullable
+as ChatType,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,conversationId: freezed == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
+as String?,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -152,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MessageEntity> messages,  bool isSending,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<MessageEntity> messages,  bool isSending,  ChatType chatType,  String? errorMessage,  String? conversationId,  String? displayName)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatState() when $default != null:
-return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
+return $default(_that.messages,_that.isSending,_that.chatType,_that.errorMessage,_that.conversationId,_that.displayName);case _:
   return orElse();
 
 }
@@ -173,10 +176,10 @@ return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MessageEntity> messages,  bool isSending,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<MessageEntity> messages,  bool isSending,  ChatType chatType,  String? errorMessage,  String? conversationId,  String? displayName)  $default,) {final _that = this;
 switch (_that) {
 case _ChatState():
-return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
+return $default(_that.messages,_that.isSending,_that.chatType,_that.errorMessage,_that.conversationId,_that.displayName);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +196,10 @@ return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MessageEntity> messages,  bool isSending,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<MessageEntity> messages,  bool isSending,  ChatType chatType,  String? errorMessage,  String? conversationId,  String? displayName)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatState() when $default != null:
-return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
+return $default(_that.messages,_that.isSending,_that.chatType,_that.errorMessage,_that.conversationId,_that.displayName);case _:
   return null;
 
 }
@@ -208,7 +211,7 @@ return $default(_that.messages,_that.isSending,_that.errorMessage);case _:
 
 
 class _ChatState implements ChatState {
-  const _ChatState({final  List<MessageEntity> messages = const [], this.isSending = false, this.errorMessage}): _messages = messages;
+  const _ChatState({final  List<MessageEntity> messages = const [], this.isSending = false, this.chatType = ChatType.channel, this.errorMessage, this.conversationId, this.displayName}): _messages = messages;
   
 
  final  List<MessageEntity> _messages;
@@ -219,7 +222,10 @@ class _ChatState implements ChatState {
 }
 
 @override@JsonKey() final  bool isSending;
+@override@JsonKey() final  ChatType chatType;
 @override final  String? errorMessage;
+@override final  String? conversationId;
+@override final  String? displayName;
 
 /// Create a copy of ChatState
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +237,16 @@ _$ChatStateCopyWith<_ChatState> get copyWith => __$ChatStateCopyWithImpl<_ChatSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.chatType, chatType) || other.chatType == chatType)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&(identical(other.displayName, displayName) || other.displayName == displayName));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),isSending,errorMessage);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),isSending,chatType,errorMessage,conversationId,displayName);
 
 @override
 String toString() {
-  return 'ChatState(messages: $messages, isSending: $isSending, errorMessage: $errorMessage)';
+  return 'ChatState(messages: $messages, isSending: $isSending, chatType: $chatType, errorMessage: $errorMessage, conversationId: $conversationId, displayName: $displayName)';
 }
 
 
@@ -251,7 +257,7 @@ abstract mixin class _$ChatStateCopyWith<$Res> implements $ChatStateCopyWith<$Re
   factory _$ChatStateCopyWith(_ChatState value, $Res Function(_ChatState) _then) = __$ChatStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<MessageEntity> messages, bool isSending, String? errorMessage
+ List<MessageEntity> messages, bool isSending, ChatType chatType, String? errorMessage, String? conversationId, String? displayName
 });
 
 
@@ -268,11 +274,14 @@ class __$ChatStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? isSending = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? isSending = null,Object? chatType = null,Object? errorMessage = freezed,Object? conversationId = freezed,Object? displayName = freezed,}) {
   return _then(_ChatState(
 messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
 as List<MessageEntity>,isSending: null == isSending ? _self.isSending : isSending // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,chatType: null == chatType ? _self.chatType : chatType // ignore: cast_nullable_to_non_nullable
+as ChatType,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,conversationId: freezed == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
+as String?,displayName: freezed == displayName ? _self.displayName : displayName // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

@@ -1,8 +1,10 @@
 import 'package:chat_app/core/error/failures.dart';
+import 'package:chat_app/core/utils/enums.dart';
 import 'package:chat_app/core/utils/error_handler.dart';
 import 'package:chat_app/core/utils/type_defs.dart';
 import 'package:chat_app/features/chat/data/datasources/message_local_datasource.dart';
 import 'package:chat_app/features/chat/data/datasources/message_remote_datasource.dart';
+import 'package:chat_app/features/chat/data/models/message_model.dart';
 import 'package:chat_app/features/chat/domain/entities/message_entity.dart';
 import 'package:chat_app/features/chat/domain/repository/message_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -41,12 +43,14 @@ class MessageRepositoryImpl implements MessageRepository {
     required String serverId,
     required String channelId,
     required String content,
+    required String messageId,
   }) async {
     try {
       final model = await _remoteDatasource.sendMessage(
         serverId: serverId,
         channelId: channelId,
         content: content,
+        messageId: messageId,
       );
 
       await ErrorHandler.handleSafely(
@@ -105,12 +109,14 @@ class MessageRepositoryImpl implements MessageRepository {
   FutureEither<MessageEntity> sendDirectMessage({
     required String conversationId,
     required String content,
+    required String messageId,
   }) async {
     try {
       // 1. Send to Remote (Firestore)
       final model = await _remoteDatasource.sendDirectMessage(
         conversationId: conversationId,
         content: content,
+        messageId: messageId
       );
 
       // 2. Cache Locally
@@ -159,6 +165,95 @@ class MessageRepositoryImpl implements MessageRepository {
       yield Left(_convertFirebaseException(e));
     } catch (e, stackTrace) {
       yield Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  @override
+  StreamEither<List<MessageEntity>> watchLocalChannelMessages(String channelId) async* {
+    try {
+      // Get stream from local datasource (returns Stream<List<MessageModel>>)
+      final modelsStream = _localDatasource.watchChannelMessages(channelId);
+
+      // Convert models to entities and wrap in Either
+      await for (final models in modelsStream) {
+        final entities = models.map((model) => model.toEntity()).toList();
+        yield Right(entities);
+      }
+    } catch (e, stackTrace) {
+      debugPrint('🔴 Error watching channel messages: $e');
+      yield Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  @override
+  StreamEither<List<MessageEntity>> watchLocalDirectMessages(String conversationId) async* {
+    try {
+      // Get stream from local datasource (returns Stream<List<MessageModel>>)
+      final modelsStream = _localDatasource.watchDirectMessages(conversationId);
+
+      // Convert models to entities and wrap in Either
+      await for (final models in modelsStream) {
+        final entities = models.map((model) => model.toEntity()).toList();
+        yield Right(entities);
+      }
+    } catch (e, stackTrace) {
+      debugPrint('🔴 Error watching DMs: $e');
+      yield Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  @override
+  FutureEither<MessageEntity> saveOptimisticMessage(
+      MessageEntity message, {
+        required String serverId,
+        required String channelId,
+      }) async {
+    try {
+      String messageId;
+
+      // Determine if it's a channel or DM and generate appropriate ID
+      if (message.isDirectMessage) {
+        // For DM: channelId is actually conversationId
+        messageId = _remoteDatasource.generateDirectMessageId(
+          conversationId: channelId,
+        );
+      } else {
+        // For channel: need both serverId and channelId
+        messageId = _remoteDatasource.generateMessageId(
+          serverId: serverId,
+          channelId: channelId,
+        );
+      }
+
+      // 2. Add Firebase-generated ID to message
+      final messageWithId = message.copyWith(messageId: messageId);
+
+      // 3. Save locally with Firebase ID
+      final model = MessageModel.fromEntity(messageWithId);
+      await _localDatasource.cacheMessage(model);
+
+      return Right(messageWithId);  // Return entity with Firebase ID
+    } catch (e, stackTrace) {
+      return Left(ErrorHandler.convertException(e, stackTrace));
+    }
+  }
+
+  @override
+  FutureVoid updateMessageStatus({
+    required String messageId,
+    required MessageStatus status,
+    String? errorMessage,
+  }) async {
+    try {
+      // Update in local datasource (no conversion needed - just IDs and status)
+      await _localDatasource.updateMessageStatus(
+        messageId: messageId,
+        status: status,
+        errorMessage: errorMessage,
+      );
+      return const Right(null);
+    } catch (e, stackTrace) {
+      return Left(ErrorHandler.convertException(e, stackTrace));
     }
   }
 }

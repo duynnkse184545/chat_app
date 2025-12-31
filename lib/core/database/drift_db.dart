@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:chat_app/core/database/converters/string_list_converter.dart';
 import 'package:chat_app/core/database/converters/string_map_converter.dart';
-import 'package:chat_app/core/database/dao/message_dao.dart';
+import 'package:chat_app/features/chat/data/datasources/message_dao.dart';
 import 'package:chat_app/features/friends/data/datasources/daos/conversation_dao.dart';
 import 'package:chat_app/features/friends/data/datasources/daos/friend_dao.dart';
 import 'package:drift/drift.dart';
@@ -26,6 +26,10 @@ class Messages extends Table {
 
   BoolColumn get isDirectMessage =>
       boolean().withDefault(const Constant(false))();
+
+  TextColumn get status => text().withDefault(const Constant('sent'))();
+
+  TextColumn get errorMessage => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {messageId};
@@ -102,6 +106,11 @@ class AppDb extends _$AppDb {
           await m.addColumn(messages, messages.isDirectMessage);
           await m.createTable(friends);
           await m.createTable(conversations);
+        }
+
+        if (from < 3) {
+          await m.addColumn(messages, messages.status);
+          await m.addColumn(messages, messages.errorMessage);
         }
       },
     );

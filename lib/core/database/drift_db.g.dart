@@ -89,6 +89,27 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     ),
     defaultValue: const Constant(false),
   );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('sent'),
+  );
+  static const VerificationMeta _errorMessageMeta = const VerificationMeta(
+    'errorMessage',
+  );
+  @override
+  late final GeneratedColumn<String> errorMessage = GeneratedColumn<String>(
+    'error_message',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     messageId,
@@ -98,6 +119,8 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     channelId,
     createdAt,
     isDirectMessage,
+    status,
+    errorMessage,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -168,6 +191,21 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
         ),
       );
     }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('error_message')) {
+      context.handle(
+        _errorMessageMeta,
+        errorMessage.isAcceptableOrUnknown(
+          data['error_message']!,
+          _errorMessageMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -205,6 +243,14 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
         DriftSqlType.bool,
         data['${effectivePrefix}is_direct_message'],
       )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      errorMessage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}error_message'],
+      ),
     );
   }
 
@@ -222,6 +268,8 @@ class Message extends DataClass implements Insertable<Message> {
   final String channelId;
   final DateTime createdAt;
   final bool isDirectMessage;
+  final String status;
+  final String? errorMessage;
   const Message({
     required this.messageId,
     required this.content,
@@ -230,6 +278,8 @@ class Message extends DataClass implements Insertable<Message> {
     required this.channelId,
     required this.createdAt,
     required this.isDirectMessage,
+    required this.status,
+    this.errorMessage,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -241,6 +291,10 @@ class Message extends DataClass implements Insertable<Message> {
     map['channel_id'] = Variable<String>(channelId);
     map['created_at'] = Variable<DateTime>(createdAt);
     map['is_direct_message'] = Variable<bool>(isDirectMessage);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || errorMessage != null) {
+      map['error_message'] = Variable<String>(errorMessage);
+    }
     return map;
   }
 
@@ -253,6 +307,10 @@ class Message extends DataClass implements Insertable<Message> {
       channelId: Value(channelId),
       createdAt: Value(createdAt),
       isDirectMessage: Value(isDirectMessage),
+      status: Value(status),
+      errorMessage: errorMessage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorMessage),
     );
   }
 
@@ -269,6 +327,8 @@ class Message extends DataClass implements Insertable<Message> {
       channelId: serializer.fromJson<String>(json['channelId']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       isDirectMessage: serializer.fromJson<bool>(json['isDirectMessage']),
+      status: serializer.fromJson<String>(json['status']),
+      errorMessage: serializer.fromJson<String?>(json['errorMessage']),
     );
   }
   @override
@@ -282,6 +342,8 @@ class Message extends DataClass implements Insertable<Message> {
       'channelId': serializer.toJson<String>(channelId),
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'isDirectMessage': serializer.toJson<bool>(isDirectMessage),
+      'status': serializer.toJson<String>(status),
+      'errorMessage': serializer.toJson<String?>(errorMessage),
     };
   }
 
@@ -293,6 +355,8 @@ class Message extends DataClass implements Insertable<Message> {
     String? channelId,
     DateTime? createdAt,
     bool? isDirectMessage,
+    String? status,
+    Value<String?> errorMessage = const Value.absent(),
   }) => Message(
     messageId: messageId ?? this.messageId,
     content: content ?? this.content,
@@ -301,6 +365,8 @@ class Message extends DataClass implements Insertable<Message> {
     channelId: channelId ?? this.channelId,
     createdAt: createdAt ?? this.createdAt,
     isDirectMessage: isDirectMessage ?? this.isDirectMessage,
+    status: status ?? this.status,
+    errorMessage: errorMessage.present ? errorMessage.value : this.errorMessage,
   );
   Message copyWithCompanion(MessagesCompanion data) {
     return Message(
@@ -315,6 +381,10 @@ class Message extends DataClass implements Insertable<Message> {
       isDirectMessage: data.isDirectMessage.present
           ? data.isDirectMessage.value
           : this.isDirectMessage,
+      status: data.status.present ? data.status.value : this.status,
+      errorMessage: data.errorMessage.present
+          ? data.errorMessage.value
+          : this.errorMessage,
     );
   }
 
@@ -327,7 +397,9 @@ class Message extends DataClass implements Insertable<Message> {
           ..write('senderName: $senderName, ')
           ..write('channelId: $channelId, ')
           ..write('createdAt: $createdAt, ')
-          ..write('isDirectMessage: $isDirectMessage')
+          ..write('isDirectMessage: $isDirectMessage, ')
+          ..write('status: $status, ')
+          ..write('errorMessage: $errorMessage')
           ..write(')'))
         .toString();
   }
@@ -341,6 +413,8 @@ class Message extends DataClass implements Insertable<Message> {
     channelId,
     createdAt,
     isDirectMessage,
+    status,
+    errorMessage,
   );
   @override
   bool operator ==(Object other) =>
@@ -352,7 +426,9 @@ class Message extends DataClass implements Insertable<Message> {
           other.senderName == this.senderName &&
           other.channelId == this.channelId &&
           other.createdAt == this.createdAt &&
-          other.isDirectMessage == this.isDirectMessage);
+          other.isDirectMessage == this.isDirectMessage &&
+          other.status == this.status &&
+          other.errorMessage == this.errorMessage);
 }
 
 class MessagesCompanion extends UpdateCompanion<Message> {
@@ -363,6 +439,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   final Value<String> channelId;
   final Value<DateTime> createdAt;
   final Value<bool> isDirectMessage;
+  final Value<String> status;
+  final Value<String?> errorMessage;
   final Value<int> rowid;
   const MessagesCompanion({
     this.messageId = const Value.absent(),
@@ -372,6 +450,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     this.channelId = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.isDirectMessage = const Value.absent(),
+    this.status = const Value.absent(),
+    this.errorMessage = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   MessagesCompanion.insert({
@@ -382,6 +462,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     required String channelId,
     required DateTime createdAt,
     this.isDirectMessage = const Value.absent(),
+    this.status = const Value.absent(),
+    this.errorMessage = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : messageId = Value(messageId),
        content = Value(content),
@@ -397,6 +479,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     Expression<String>? channelId,
     Expression<DateTime>? createdAt,
     Expression<bool>? isDirectMessage,
+    Expression<String>? status,
+    Expression<String>? errorMessage,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -407,6 +491,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       if (channelId != null) 'channel_id': channelId,
       if (createdAt != null) 'created_at': createdAt,
       if (isDirectMessage != null) 'is_direct_message': isDirectMessage,
+      if (status != null) 'status': status,
+      if (errorMessage != null) 'error_message': errorMessage,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -419,6 +505,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     Value<String>? channelId,
     Value<DateTime>? createdAt,
     Value<bool>? isDirectMessage,
+    Value<String>? status,
+    Value<String?>? errorMessage,
     Value<int>? rowid,
   }) {
     return MessagesCompanion(
@@ -429,6 +517,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       channelId: channelId ?? this.channelId,
       createdAt: createdAt ?? this.createdAt,
       isDirectMessage: isDirectMessage ?? this.isDirectMessage,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -457,6 +547,12 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     if (isDirectMessage.present) {
       map['is_direct_message'] = Variable<bool>(isDirectMessage.value);
     }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (errorMessage.present) {
+      map['error_message'] = Variable<String>(errorMessage.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -473,6 +569,8 @@ class MessagesCompanion extends UpdateCompanion<Message> {
           ..write('channelId: $channelId, ')
           ..write('createdAt: $createdAt, ')
           ..write('isDirectMessage: $isDirectMessage, ')
+          ..write('status: $status, ')
+          ..write('errorMessage: $errorMessage, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1526,6 +1624,8 @@ typedef $$MessagesTableCreateCompanionBuilder =
       required String channelId,
       required DateTime createdAt,
       Value<bool> isDirectMessage,
+      Value<String> status,
+      Value<String?> errorMessage,
       Value<int> rowid,
     });
 typedef $$MessagesTableUpdateCompanionBuilder =
@@ -1537,6 +1637,8 @@ typedef $$MessagesTableUpdateCompanionBuilder =
       Value<String> channelId,
       Value<DateTime> createdAt,
       Value<bool> isDirectMessage,
+      Value<String> status,
+      Value<String?> errorMessage,
       Value<int> rowid,
     });
 
@@ -1580,6 +1682,16 @@ class $$MessagesTableFilterComposer extends Composer<_$AppDb, $MessagesTable> {
 
   ColumnFilters<bool> get isDirectMessage => $composableBuilder(
     column: $table.isDirectMessage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -1627,6 +1739,16 @@ class $$MessagesTableOrderingComposer
     column: $table.isDirectMessage,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$MessagesTableAnnotationComposer
@@ -1660,6 +1782,14 @@ class $$MessagesTableAnnotationComposer
 
   GeneratedColumn<bool> get isDirectMessage => $composableBuilder(
     column: $table.isDirectMessage,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get errorMessage => $composableBuilder(
+    column: $table.errorMessage,
     builder: (column) => column,
   );
 }
@@ -1699,6 +1829,8 @@ class $$MessagesTableTableManager
                 Value<String> channelId = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<bool> isDirectMessage = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> errorMessage = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MessagesCompanion(
                 messageId: messageId,
@@ -1708,6 +1840,8 @@ class $$MessagesTableTableManager
                 channelId: channelId,
                 createdAt: createdAt,
                 isDirectMessage: isDirectMessage,
+                status: status,
+                errorMessage: errorMessage,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -1719,6 +1853,8 @@ class $$MessagesTableTableManager
                 required String channelId,
                 required DateTime createdAt,
                 Value<bool> isDirectMessage = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> errorMessage = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => MessagesCompanion.insert(
                 messageId: messageId,
@@ -1728,6 +1864,8 @@ class $$MessagesTableTableManager
                 channelId: channelId,
                 createdAt: createdAt,
                 isDirectMessage: isDirectMessage,
+                status: status,
+                errorMessage: errorMessage,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

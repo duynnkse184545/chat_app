@@ -10,10 +10,12 @@ class SendDirectMessageUseCase {
   FutureEither<MessageEntity> call({
     required String conversationId,
     required String content,
+    required String messageId,
   }) {
     return _repository.sendDirectMessage(
       conversationId: conversationId,
       content: content,
+      messageId: messageId
     );
   }
 }

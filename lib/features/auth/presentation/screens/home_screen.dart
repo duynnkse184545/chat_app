@@ -38,6 +38,16 @@ class HomeScreen extends ConsumerWidget{
                 minimumSize: const Size(200, 48),
               ),
             ),
+            const SizedBox(height: 16),
+            // NEW: Friends button
+            ElevatedButton.icon(
+              onPressed: () => Routes.goToFriends(context),
+              icon: const Icon(Icons.people),
+              label: const Text('Friends'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(200, 48),
+              ),
+            ),
           ],
         ),
       ),

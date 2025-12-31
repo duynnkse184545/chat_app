@@ -6,7 +6,7 @@ part of 'chat_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatControllerHash() => r'7328bb472b62d4f9b6c3772ebbff9a04a5780e99';
+String _$chatControllerHash() => r'ee386bc0d8312d56591eba7cd82078fcc84cbce3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,13 +31,9 @@ class _SystemHash {
 
 abstract class _$ChatController
     extends BuildlessAutoDisposeStreamNotifier<ChatState> {
-  late final String serverId;
-  late final String channelId;
+  late final ChatParams params;
 
-  Stream<ChatState> build({
-    required String serverId,
-    required String channelId,
-  });
+  Stream<ChatState> build({required ChatParams params});
 }
 
 /// See also [ChatController].
@@ -50,18 +46,15 @@ class ChatControllerFamily extends Family<AsyncValue<ChatState>> {
   const ChatControllerFamily();
 
   /// See also [ChatController].
-  ChatControllerProvider call({
-    required String serverId,
-    required String channelId,
-  }) {
-    return ChatControllerProvider(serverId: serverId, channelId: channelId);
+  ChatControllerProvider call({required ChatParams params}) {
+    return ChatControllerProvider(params: params);
   }
 
   @override
   ChatControllerProvider getProviderOverride(
     covariant ChatControllerProvider provider,
   ) {
-    return call(serverId: provider.serverId, channelId: provider.channelId);
+    return call(params: provider.params);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -83,11 +76,9 @@ class ChatControllerFamily extends Family<AsyncValue<ChatState>> {
 class ChatControllerProvider
     extends AutoDisposeStreamNotifierProviderImpl<ChatController, ChatState> {
   /// See also [ChatController].
-  ChatControllerProvider({required String serverId, required String channelId})
+  ChatControllerProvider({required ChatParams params})
     : this._internal(
-        () => ChatController()
-          ..serverId = serverId
-          ..channelId = channelId,
+        () => ChatController()..params = params,
         from: chatControllerProvider,
         name: r'chatControllerProvider',
         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -96,8 +87,7 @@ class ChatControllerProvider
         dependencies: ChatControllerFamily._dependencies,
         allTransitiveDependencies:
             ChatControllerFamily._allTransitiveDependencies,
-        serverId: serverId,
-        channelId: channelId,
+        params: params,
       );
 
   ChatControllerProvider._internal(
@@ -107,16 +97,14 @@ class ChatControllerProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.serverId,
-    required this.channelId,
+    required this.params,
   }) : super.internal();
 
-  final String serverId;
-  final String channelId;
+  final ChatParams params;
 
   @override
   Stream<ChatState> runNotifierBuild(covariant ChatController notifier) {
-    return notifier.build(serverId: serverId, channelId: channelId);
+    return notifier.build(params: params);
   }
 
   @override
@@ -124,16 +112,13 @@ class ChatControllerProvider
     return ProviderOverride(
       origin: this,
       override: ChatControllerProvider._internal(
-        () => create()
-          ..serverId = serverId
-          ..channelId = channelId,
+        () => create()..params = params,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        serverId: serverId,
-        channelId: channelId,
+        params: params,
       ),
     );
   }
@@ -146,16 +131,13 @@ class ChatControllerProvider
 
   @override
   bool operator ==(Object other) {
-    return other is ChatControllerProvider &&
-        other.serverId == serverId &&
-        other.channelId == channelId;
+    return other is ChatControllerProvider && other.params == params;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, serverId.hashCode);
-    hash = _SystemHash.combine(hash, channelId.hashCode);
+    hash = _SystemHash.combine(hash, params.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -164,11 +146,8 @@ class ChatControllerProvider
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin ChatControllerRef on AutoDisposeStreamNotifierProviderRef<ChatState> {
-  /// The parameter `serverId` of this provider.
-  String get serverId;
-
-  /// The parameter `channelId` of this provider.
-  String get channelId;
+  /// The parameter `params` of this provider.
+  ChatParams get params;
 }
 
 class _ChatControllerProviderElement
@@ -177,9 +156,7 @@ class _ChatControllerProviderElement
   _ChatControllerProviderElement(super.provider);
 
   @override
-  String get serverId => (origin as ChatControllerProvider).serverId;
-  @override
-  String get channelId => (origin as ChatControllerProvider).channelId;
+  ChatParams get params => (origin as ChatControllerProvider).params;
 }
 
 // ignore_for_file: type=lint

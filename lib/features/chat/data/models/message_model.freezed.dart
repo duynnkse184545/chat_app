@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MessageModel {
 
- String get messageId; String get content; String get senderId; String get senderName; String get channelId;@TimestampConverter() DateTime get createdAt; bool get isDirectMessage;
+ String get messageId; String get content; String get senderId; String get senderName;// Dm and channel, determind by isDirectMessage
+ String get channelId;@TimestampConverter() DateTime get createdAt; bool get isDirectMessage; MessageStatus get status; String? get errorMessage;
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +29,16 @@ $MessageModelCopyWith<MessageModel> get copyWith => _$MessageModelCopyWithImpl<M
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageModel&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.content, content) || other.content == content)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.senderName, senderName) || other.senderName == senderName)&&(identical(other.channelId, channelId) || other.channelId == channelId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDirectMessage, isDirectMessage) || other.isDirectMessage == isDirectMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageModel&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.content, content) || other.content == content)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.senderName, senderName) || other.senderName == senderName)&&(identical(other.channelId, channelId) || other.channelId == channelId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDirectMessage, isDirectMessage) || other.isDirectMessage == isDirectMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,messageId,content,senderId,senderName,channelId,createdAt,isDirectMessage);
+int get hashCode => Object.hash(runtimeType,messageId,content,senderId,senderName,channelId,createdAt,isDirectMessage,status,errorMessage);
 
 @override
 String toString() {
-  return 'MessageModel(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, channelId: $channelId, createdAt: $createdAt, isDirectMessage: $isDirectMessage)';
+  return 'MessageModel(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, channelId: $channelId, createdAt: $createdAt, isDirectMessage: $isDirectMessage, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -48,7 +49,7 @@ abstract mixin class $MessageModelCopyWith<$Res>  {
   factory $MessageModelCopyWith(MessageModel value, $Res Function(MessageModel) _then) = _$MessageModelCopyWithImpl;
 @useResult
 $Res call({
- String messageId, String content, String senderId, String senderName, String channelId,@TimestampConverter() DateTime createdAt, bool isDirectMessage
+ String messageId, String content, String senderId, String senderName, String channelId,@TimestampConverter() DateTime createdAt, bool isDirectMessage, MessageStatus status, String? errorMessage
 });
 
 
@@ -65,7 +66,7 @@ class _$MessageModelCopyWithImpl<$Res>
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? messageId = null,Object? content = null,Object? senderId = null,Object? senderName = null,Object? channelId = null,Object? createdAt = null,Object? isDirectMessage = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? messageId = null,Object? content = null,Object? senderId = null,Object? senderName = null,Object? channelId = null,Object? createdAt = null,Object? isDirectMessage = null,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
@@ -74,7 +75,9 @@ as String,senderName: null == senderName ? _self.senderName : senderName // igno
 as String,channelId: null == channelId ? _self.channelId : channelId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isDirectMessage: null == isDirectMessage ? _self.isDirectMessage : isDirectMessage // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as MessageStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -159,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage,  MessageStatus status,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MessageModel() when $default != null:
-return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage);case _:
+return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage,_that.status,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -180,10 +183,10 @@ return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage,  MessageStatus status,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _MessageModel():
-return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage);case _:
+return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage,_that.status,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +203,10 @@ return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String messageId,  String content,  String senderId,  String senderName,  String channelId, @TimestampConverter()  DateTime createdAt,  bool isDirectMessage,  MessageStatus status,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _MessageModel() when $default != null:
-return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage);case _:
+return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_that.channelId,_that.createdAt,_that.isDirectMessage,_that.status,_that.errorMessage);case _:
   return null;
 
 }
@@ -215,16 +218,19 @@ return $default(_that.messageId,_that.content,_that.senderId,_that.senderName,_t
 @JsonSerializable()
 
 class _MessageModel extends MessageModel {
-  const _MessageModel({required this.messageId, required this.content, required this.senderId, required this.senderName, required this.channelId, @TimestampConverter() required this.createdAt, this.isDirectMessage = false}): super._();
+  const _MessageModel({required this.messageId, required this.content, required this.senderId, required this.senderName, required this.channelId, @TimestampConverter() required this.createdAt, this.isDirectMessage = false, this.status = MessageStatus.sent, this.errorMessage}): super._();
   factory _MessageModel.fromJson(Map<String, dynamic> json) => _$MessageModelFromJson(json);
 
 @override final  String messageId;
 @override final  String content;
 @override final  String senderId;
 @override final  String senderName;
+// Dm and channel, determind by isDirectMessage
 @override final  String channelId;
 @override@TimestampConverter() final  DateTime createdAt;
 @override@JsonKey() final  bool isDirectMessage;
+@override@JsonKey() final  MessageStatus status;
+@override final  String? errorMessage;
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessageModel&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.content, content) || other.content == content)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.senderName, senderName) || other.senderName == senderName)&&(identical(other.channelId, channelId) || other.channelId == channelId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDirectMessage, isDirectMessage) || other.isDirectMessage == isDirectMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MessageModel&&(identical(other.messageId, messageId) || other.messageId == messageId)&&(identical(other.content, content) || other.content == content)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.senderName, senderName) || other.senderName == senderName)&&(identical(other.channelId, channelId) || other.channelId == channelId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.isDirectMessage, isDirectMessage) || other.isDirectMessage == isDirectMessage)&&(identical(other.status, status) || other.status == status)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,messageId,content,senderId,senderName,channelId,createdAt,isDirectMessage);
+int get hashCode => Object.hash(runtimeType,messageId,content,senderId,senderName,channelId,createdAt,isDirectMessage,status,errorMessage);
 
 @override
 String toString() {
-  return 'MessageModel(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, channelId: $channelId, createdAt: $createdAt, isDirectMessage: $isDirectMessage)';
+  return 'MessageModel(messageId: $messageId, content: $content, senderId: $senderId, senderName: $senderName, channelId: $channelId, createdAt: $createdAt, isDirectMessage: $isDirectMessage, status: $status, errorMessage: $errorMessage)';
 }
 
 
@@ -259,7 +265,7 @@ abstract mixin class _$MessageModelCopyWith<$Res> implements $MessageModelCopyWi
   factory _$MessageModelCopyWith(_MessageModel value, $Res Function(_MessageModel) _then) = __$MessageModelCopyWithImpl;
 @override @useResult
 $Res call({
- String messageId, String content, String senderId, String senderName, String channelId,@TimestampConverter() DateTime createdAt, bool isDirectMessage
+ String messageId, String content, String senderId, String senderName, String channelId,@TimestampConverter() DateTime createdAt, bool isDirectMessage, MessageStatus status, String? errorMessage
 });
 
 
@@ -276,7 +282,7 @@ class __$MessageModelCopyWithImpl<$Res>
 
 /// Create a copy of MessageModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? messageId = null,Object? content = null,Object? senderId = null,Object? senderName = null,Object? channelId = null,Object? createdAt = null,Object? isDirectMessage = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? messageId = null,Object? content = null,Object? senderId = null,Object? senderName = null,Object? channelId = null,Object? createdAt = null,Object? isDirectMessage = null,Object? status = null,Object? errorMessage = freezed,}) {
   return _then(_MessageModel(
 messageId: null == messageId ? _self.messageId : messageId // ignore: cast_nullable_to_non_nullable
 as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
@@ -285,7 +291,9 @@ as String,senderName: null == senderName ? _self.senderName : senderName // igno
 as String,channelId: null == channelId ? _self.channelId : channelId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,isDirectMessage: null == isDirectMessage ? _self.isDirectMessage : isDirectMessage // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as MessageStatus,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

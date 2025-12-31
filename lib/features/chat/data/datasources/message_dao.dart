@@ -81,4 +81,19 @@ class MessageDao extends DatabaseAccessor<AppDb> with _$MessageDaoMixin{
   Future<void> clearAllDirectMessages() async {
     await (delete(messages)..where((tbl) => tbl.isDirectMessage.equals(true))).go();
   }
+
+  Future<void> updateMessageStatus({
+    required String messageId,
+    required String status,
+    String? errorMessage,
+  }) async {
+    await (update(messages)
+      ..where((tbl) => tbl.messageId.equals(messageId)))
+        .write(
+      MessagesCompanion(
+        status: Value(status),
+        errorMessage: Value(errorMessage),
+      ),
+    );
+  }
 }
