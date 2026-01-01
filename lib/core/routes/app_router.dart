@@ -1,5 +1,5 @@
 import 'package:chat_app/core/constants/route_constants.dart';
-import 'package:chat_app/core/widgets/loader.dart';
+import 'package:chat_app/core/widgets/auth_loading_screen.dart';
 import 'package:chat_app/features/auth/presentation/controllers/auth_providers.dart';
 import 'package:chat_app/features/auth/presentation/screens/home_screen.dart';
 import 'package:chat_app/features/auth/presentation/screens/sign_in_screen.dart';
@@ -19,22 +19,45 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
-  final authState = ref.watch(authStateChangesProvider);
+  // Create a notifier to trigger router refreshes
+  final notifier = ValueNotifier<int>(0);
+  
+  // Listen to auth state changes and notify the router
+  final sub = ref.listen(authStateChangesProvider, (_, _) {
+    notifier.value++;
+  });
+  
+  // Listen to auth loading changes
+  final sub2 = ref.listen(authLoadingProvider, (_, _) {
+    notifier.value++;
+  });
+  
+  // Cleanup
+  ref.onDispose(() {
+    sub.close();
+    sub2.close();
+    notifier.dispose();
+  });
 
   return GoRouter(
+    refreshListenable: notifier,
     debugLogDiagnostics: true,
     initialLocation: Routes.home.path,
     redirect: (context, state) {
+      // Use read instead of watch to avoid rebuilding the provider
+      final authState = ref.read(authStateChangesProvider);
+      final isGlobalLoading = ref.read(authLoadingProvider);
+      
       final isLoading = authState.isLoading;
       final isAuthenticated = authState.value != null;
       final currentPath = state.matchedLocation;
       final isOnAuthPage =
           currentPath == Routes.signIn.path ||
           currentPath == Routes.signUp.path;
+      
+      debugPrint('🔄 Router redirect - isLoading: $isLoading, isAuthenticated: $isAuthenticated, loading: $isGlobalLoading');
 
-      debugPrint('🔄 Router redirect - isLoading: $isLoading, isAuthenticated: $isAuthenticated, path: $currentPath');
-
-      if (isLoading) {
+      if (isLoading || isGlobalLoading) {
         return Routes.loading.path;
       }
 
@@ -45,9 +68,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
 
       // If not authenticated and not on auth pages, go to sign-in
-      if (!isAuthenticated &&
-          !isOnAuthPage &&
-          currentPath != Routes.loading.path) {
+      if (!isAuthenticated && !isOnAuthPage) {
         debugPrint('🔐 Redirecting unauthenticated user to sign-in');
         return Routes.signIn.path;
       }
@@ -59,7 +80,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.loading.path,
         name: Routes.loading.name,
-        builder: (context, state) => const Scaffold(body: Loader()),
+        builder: (context, state) => const AuthLoadingScreen(),
       ),
 
       GoRoute(

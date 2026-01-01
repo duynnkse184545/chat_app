@@ -11,7 +11,12 @@ Future<void> main() async {
   await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(const ProviderScope(
+      child: MyApp()
+    // child: MaterialApp(
+    //   home: AuthLoadingScreen(),
+    // ),
+  ));
 }
 
 class MyApp extends ConsumerWidget {

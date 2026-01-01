@@ -1,4 +1,5 @@
 import 'package:chat_app/core/utils/validators.dart';
+import 'package:chat_app/features/auth/presentation/controllers/auth_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -41,6 +42,9 @@ class SignInController extends _$SignInController {
 
   Future<bool> signIn() async {
     if (!_validate()) return false;
+    
+    // Keep this provider alive during the async operation and navigation
+    final link = ref.keepAlive();
 
     state = state.copyWith(isLoading: true, generalError: null);
 
@@ -54,11 +58,24 @@ class SignInController extends _$SignInController {
       (failure) {
         debugPrint('🔴 Sign-in failed: ${failure.message}');
         state = state.copyWith(isLoading: false, generalError: failure.message);
+        link.close();
         return false;
       },
-      (user) {
+      (user) async {
         debugPrint('✅ Sign-in successful: ${user.email}');
+        
+        // Trigger global loading (Redirects to /loading)
+        ref.read(authLoadingProvider.notifier).state = true;
+        
         state = state.copyWith(isLoading: false);
+        
+        // Artificial delay for UX
+        await Future.delayed(const Duration(seconds: 2));
+        
+        // Stop global loading (Redirects to /home via isAuthenticated check)
+        ref.read(authLoadingProvider.notifier).state = false;
+        
+        link.close();
         return true;
       },
     );

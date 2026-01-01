@@ -1,10 +1,9 @@
+import 'package:chat_app/core/constants/route_constants.dart';
 import 'package:chat_app/core/theme/app_colors.dart';
 import 'package:chat_app/core/widgets/loader.dart';
 import 'package:chat_app/features/auth/presentation/controllers/sign_in_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:chat_app/core/constants/route_constants.dart';
 
 class SignInScreen extends ConsumerWidget {
 
@@ -15,11 +14,7 @@ class SignInScreen extends ConsumerWidget {
 
     if (!context.mounted) return;
 
-    if (success) {
-      // Sign-in successful - manually navigate to home (same as sign-up does)
-      debugPrint('✅ Sign-in handler: Success, navigating to home...');
-      Routes.goToHome(context);
-    } else {
+    if (!success) {
       final errorMessage = ref.read(signInControllerProvider).generalError;
       if (errorMessage != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -30,6 +25,7 @@ class SignInScreen extends ConsumerWidget {
         );
       }
     }
+    // Success is handled by Router redirection via authLoadingProvider
   }
 
   @override

@@ -47,3 +47,5 @@ Stream<UserEntity?> authStateChanges(Ref ref) {
 UserEntity? currentUser(Ref ref){
   return ref.watch(authStateChangesProvider).value;
 }
+
+final authLoadingProvider = StateProvider<bool>((ref) => false);
