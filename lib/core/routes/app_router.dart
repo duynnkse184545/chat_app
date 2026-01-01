@@ -54,11 +54,17 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final isOnAuthPage =
           currentPath == Routes.signIn.path ||
           currentPath == Routes.signUp.path;
+      final isOnLoadingScreen = currentPath == Routes.loading.path;
       
       debugPrint('🔄 Router redirect - isLoading: $isLoading, isAuthenticated: $isAuthenticated, loading: $isGlobalLoading');
 
       if (isLoading || isGlobalLoading) {
         return Routes.loading.path;
+      }
+
+      // If we are on loading screen but NOT loading anymore, move on!
+      if (isOnLoadingScreen) {
+        return isAuthenticated ? Routes.home.path : Routes.signIn.path;
       }
 
       // If authenticated and not on home, go to home

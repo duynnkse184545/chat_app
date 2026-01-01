@@ -1,7 +1,5 @@
-import 'package:chat_app/core/constants/route_constants.dart';
 import 'package:chat_app/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class AuthLoadingScreen extends StatefulWidget {
   const AuthLoadingScreen({super.key});
@@ -41,21 +39,6 @@ class _AuthLoadingScreenState extends State<AuthLoadingScreen>
 
     // Animate progress bar
     _animateProgress();
-    
-    // Navigate to home after 2 seconds
-    _navigateToHome();
-  }
-  
-  Future<void> _navigateToHome() async {
-    debugPrint('⏳ Starting 2 second delay...');
-    await Future.delayed(const Duration(seconds: 3));
-    debugPrint('✅ Delay complete, navigating to home...');
-    if (mounted) {
-      context.go(Routes.home.path);
-      debugPrint('✅ Navigation to home completed');
-    } else {
-      debugPrint('⚠️ Widget not mounted, skipping navigation');
-    }
   }
 
   void _animateProgress() async {

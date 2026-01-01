@@ -70,7 +70,7 @@ class SignInController extends _$SignInController {
         state = state.copyWith(isLoading: false);
         
         // Artificial delay for UX
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 3));
         
         // Stop global loading (Redirects to /home via isAuthenticated check)
         ref.read(authLoadingProvider.notifier).state = false;
